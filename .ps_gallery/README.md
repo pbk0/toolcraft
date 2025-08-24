@@ -12,11 +12,9 @@ Usage:
 1. Create a .env file in repo root (same level as pyproject.toml) with:
    POWERSHELL_GALLERY_API_KEY=your-powershell-gallery-api-key
 
-2. Validate manifest:
-   pwsh -NoProfile -File .ps_gallery/Publish-ToolCraft.ps1 -WhatIf
+2. Validate manifest (dry run):
+   pwsh -NoProfile -File .ps_gallery/Publish-ToolCraft.ps1 -DryRun
 
 3. Publish:
    pwsh -NoProfile -File .ps_gallery/Publish-ToolCraft.ps1
 
-Alternatively, you can publish directly:
-   Publish-Module -Name ToolCraft -Path .ps_gallery/ToolCraft -NuGetApiKey $env:POWERSHELL_GALLERY_API_KEY

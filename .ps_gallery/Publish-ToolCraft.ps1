@@ -1,7 +1,7 @@
 param(
     [string]$Repository = 'PSGallery',
     [string]$ApiKeyEnvName = 'POWERSHELL_GALLERY_API_KEY',
-    [switch]$WhatIf
+    [switch]$DryRun
 )
 
 Set-StrictMode -Version Latest
@@ -44,11 +44,11 @@ Write-Host ("Module: {0} v{1}" -f $info.Name, $info.Version)
 
 ${item} = Get-Item -Path ("env:{0}" -f $ApiKeyEnvName) -ErrorAction SilentlyContinue
 $apiKey = if ($item) { $item.Value } else { $null }
-if ($WhatIf.IsPresent -and [string]::IsNullOrEmpty($apiKey)) { $apiKey = 'DUMMY' }
-if (-not $WhatIf.IsPresent -and [string]::IsNullOrEmpty($apiKey)) {
-    throw "NuGet API key not found. Ensure $ApiKeyEnvName is set in environment or in .env file at $dotenvPath"
+if ($DryRun.IsPresent -and [string]::IsNullOrEmpty($apiKey)) { $apiKey = 'DUMMY' }
+if (-not $DryRun.IsPresent -and [string]::IsNullOrEmpty($apiKey)) {
+    throw "PowerShell Gallery API key not found. Ensure $ApiKeyEnvName is set in environment or in .env file at $dotenvPath"
 }
 
 Write-Host "Publishing to $Repository..."
-Publish-Module -Path $moduleRoot -Repository $Repository -NuGetApiKey $apiKey -WhatIf:$WhatIf.IsPresent -ErrorAction Stop
+Publish-Module -Path $moduleRoot -Repository $Repository -NuGetApiKey $apiKey -WhatIf:$DryRun.IsPresent -ErrorAction Stop
 Write-Host 'Publish completed.'
