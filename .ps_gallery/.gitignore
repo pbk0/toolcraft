@@ -1,0 +1,7 @@
+# Ignore secrets
+.env
+
+# Ignore module publish output (if any temporary artifacts are created)
+*.nupkg
+*.nuspec
+*.ps1xml
