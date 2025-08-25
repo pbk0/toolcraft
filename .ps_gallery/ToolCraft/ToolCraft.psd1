@@ -27,7 +27,7 @@
     PowerShellVersion = '7.0'
 
     # Functions to export from this module
-    FunctionsToExport = @('Get-ToolCraftInfo')
+    FunctionsToExport = @('toolcraft-win')
 
     # Cmdlets to export from this module
     CmdletsToExport   = @()
