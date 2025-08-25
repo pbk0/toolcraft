@@ -88,26 +88,34 @@
           "label": "Validate manifest (Test-ModuleManifest)",
           "value": "Test-ModuleManifest .\\.ps_gallery\\ToolCraft\\ToolCraft.psd1"
         },
-        {
-          "label": "Import & Get-ToolCraftInfo",
-          "value": "Import-Module .\\.ps_gallery\\ToolCraft -Force; Get-ToolCraftInfo | Format-List *"
-        },
+          {
+            "label": "Import & Invoke-ToolCraftInfo",
+            "value": "Import-Module .\\.ps_gallery\\ToolCraft -Force; Invoke-ToolCraftInfo | Format-List *"
+          },
         {
           "label": "Import from local folder",
           "value": "Import-Module .\\.ps_gallery\\ToolCraft -Force"
         },
-        {
-          "label": "Verify Get-ToolCraftInfo command",
-          "value": "Get-ToolCraftInfo"
-        },
+          {
+            "label": "Verify Invoke-ToolCraftInfo command",
+            "value": "Invoke-ToolCraftInfo"
+          },
         {
           "label": "Remove from session",
           "value": "Remove-Module ToolCraft -ErrorAction SilentlyContinue"
         },
-        {
-          "label": "Import via PSModulePath",
-          "value": "$env:PSModulePath=([string]::Join(';',(Resolve-Path .\\.ps_gallery),$env:PSModulePath)); Import-Module ToolCraft -Force; Get-ToolCraftInfo"
-        }
+          {
+            "label": "Import via PSModulePath",
+            "value": "$env:PSModulePath=([string]::Join(';',(Resolve-Path .\\.ps_gallery),$env:PSModulePath)); Import-Module ToolCraft -Force; Invoke-ToolCraftInfo"
+          },
+          {
+              "label": "Run ToolCraft Setup (toolcraft-win setup)",
+              "value": "Import-Module .\\.ps_gallery\\ToolCraft -Force; toolcraft-win setup"
+          },
+            {
+              "label": "Run ToolCraft Launch (toolcraft-win launch)",
+              "value": "Import-Module .\\.ps_gallery\\ToolCraft -Force; toolcraft-win launch"
+          }
       ],
       "default": "Import-Module .\\.ps_gallery\\ToolCraft -Force; Get-ToolCraftInfo | Format-List *"
     }

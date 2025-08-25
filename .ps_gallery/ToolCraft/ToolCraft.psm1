@@ -26,6 +26,7 @@ function Invoke-ToolCraftInfo {
     [pscustomobject]@{
         ModuleName   = $manifest.Name
         Version      = $manifest.Version.ToString()
+        Author       = $manifest.Author
         Guid         = $manifest.Guid
         Description  = $manifest.Description
         RootPath     = $PSScriptRoot
@@ -38,8 +39,9 @@ function Invoke-ToolCraftSetup {
         Sets up the ToolCraft environment and dependencies.
 
     .DESCRIPTION
-        Placeholder function for ToolCraft setup operations.
-        Implementation to be added later.
+        Sets up the ToolCraft environment by installing required dependencies:
+        1. Installs or upgrades winget
+        2. Installs or upgrades astral-sh.uv package via winget
 
     .EXAMPLE
         Invoke-ToolCraftSetup
@@ -48,8 +50,126 @@ function Invoke-ToolCraftSetup {
     param()
 
     Write-TcVerbose "Executing ToolCraft setup"
-    Write-Host "ToolCraft Setup - Implementation coming soon..." -ForegroundColor Yellow
-    Write-Host "This function will handle environment setup and dependency configuration." -ForegroundColor Gray
+    Write-Host "🔧 Starting ToolCraft Setup..." -ForegroundColor Cyan
+    Write-Host ""
+
+    # Step 1: Install/upgrade winget
+    Write-Host "Step 1: Checking winget installation..." -ForegroundColor Yellow
+    try {
+        $wingetVersion = winget --version 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Host "✅ winget is already installed (version: $wingetVersion)" -ForegroundColor Green
+            Write-Host "🔄 Attempting to upgrade winget..." -ForegroundColor Yellow
+            
+            # Try to upgrade winget via Microsoft Store or App Installer
+            try {
+                $upgradeResult = winget upgrade --id Microsoft.AppInstaller --accept-source-agreements --accept-package-agreements 2>&1
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host "✅ winget upgrade completed successfully" -ForegroundColor Green
+                } else {
+                    # Check if it's because no upgrade is available
+                    if ($upgradeResult -match "No available upgrade found" -or $upgradeResult -match "No newer package versions") {
+                        Write-Host "✅ winget is already up to date" -ForegroundColor Green
+                    } else {
+                        Write-Host "ℹ️  winget upgrade not available - continuing with current version" -ForegroundColor Cyan
+                    }
+                }
+            } catch {
+                Write-Host "ℹ️  Could not upgrade winget automatically - continuing with current version" -ForegroundColor Cyan
+            }
+        } else {
+            throw "winget not found"
+        }
+    } catch {
+        Write-Host "❌ winget is not installed" -ForegroundColor Red
+        Write-Host "📥 Please install winget manually from:" -ForegroundColor Yellow
+        Write-Host "   https://aka.ms/getwinget" -ForegroundColor Yellow
+        Write-Host "   Or install from Microsoft Store: App Installer" -ForegroundColor Yellow
+        throw "winget installation required"
+    }
+
+    Write-Host ""
+
+    # Step 2: Install/upgrade astral-sh.uv
+    Write-Host "Step 2: Installing/upgrading astral-sh.uv..." -ForegroundColor Yellow
+    try {
+        # Check if uv is already installed
+        $uvInstalled = $false
+        try {
+            winget list --id astral-sh.uv --accept-source-agreements 2>$null | Out-Null
+            if ($LASTEXITCODE -eq 0) {
+                $uvInstalled = $true
+                Write-Host "📦 astral-sh.uv is already installed" -ForegroundColor Green
+                Write-Host "🔄 Attempting to upgrade astral-sh.uv..." -ForegroundColor Yellow
+                winget upgrade --id astral-sh.uv --accept-source-agreements --accept-package-agreements
+                
+                # Check if upgrade was successful or not needed
+                if ($LASTEXITCODE -eq 0) {
+                    Write-Host "✅ astral-sh.uv upgrade completed successfully" -ForegroundColor Green
+                } else {
+                    # Check if it's because no upgrade is available
+                    $upgradeOutput = winget upgrade --id astral-sh.uv --accept-source-agreements --accept-package-agreements 2>&1
+                    if ($upgradeOutput -match "No available upgrade found" -or $upgradeOutput -match "No newer package versions") {
+                        Write-Host "✅ astral-sh.uv is already up to date" -ForegroundColor Green
+                    } else {
+                        Write-Host "⚠️  astral-sh.uv upgrade had issues but package is installed" -ForegroundColor Yellow
+                    }
+                }
+            }
+        } catch {
+            # uv not installed, continue to install
+        }
+
+        if (-not $uvInstalled) {
+            Write-Host "📦 Installing astral-sh.uv..." -ForegroundColor Yellow
+            winget install --id astral-sh.uv --accept-source-agreements --accept-package-agreements
+            
+            if ($LASTEXITCODE -ne 0) {
+                throw "Failed to install astral-sh.uv"
+            }
+            Write-Host "✅ astral-sh.uv installation completed successfully" -ForegroundColor Green
+        }
+
+        # Verify installation
+        try {
+            $uvVersion = uv --version 2>$null
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "✅ uv is working correctly (version: $uvVersion)" -ForegroundColor Green
+            } else {
+                Write-Host "⚠️  uv installed but may require a shell restart to be available in PATH" -ForegroundColor Yellow
+            }
+        } catch {
+            Write-Host "⚠️  uv installed but may require a shell restart to be available in PATH" -ForegroundColor Yellow
+        }
+    } catch {
+        Write-Host "❌ Failed to install/upgrade astral-sh.uv: $($_.Exception.Message)" -ForegroundColor Red
+        throw
+    }
+
+    Write-Host ""
+    Write-Host "🎉 ToolCraft setup completed successfully!" -ForegroundColor Green
+    Write-Host "💡 You may need to restart your terminal for all changes to take effect." -ForegroundColor Cyan
+    Write-Host ""
+
+    # Step 3: Run 'uv sync' in .\toolcraft-win
+    Write-Host "Step 3: Running 'uv sync' in .\toolcraft-win..." -ForegroundColor Yellow
+    $syncPath = Join-Path $PSScriptRoot 'toolcraft-win'
+    if (Test-Path $syncPath) {
+        Push-Location $syncPath
+        try {
+            uv sync
+            if ($LASTEXITCODE -eq 0) {
+                Write-Host "✅ 'uv sync' completed successfully in $syncPath" -ForegroundColor Green
+            } else {
+                Write-Host "❌ 'uv sync' failed in $syncPath" -ForegroundColor Red
+            }
+        } catch {
+            Write-Host "❌ Error running 'uv sync': $($_.Exception.Message)" -ForegroundColor Red
+        }
+        Pop-Location
+    } else {
+        Write-Host "⚠️  Directory .\toolcraft-win not found. Skipping 'uv sync'." -ForegroundColor Yellow
+    }
 }
 
 function Invoke-ToolCraftLaunch {
