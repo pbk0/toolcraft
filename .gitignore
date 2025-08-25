@@ -36,9 +36,6 @@ coverage.xml
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# VS Code
-.vscode/
-
 # Environments
 .env
 .venv

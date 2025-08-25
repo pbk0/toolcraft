@@ -1,0 +1,39 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PS: Publish",
+      "type": "shell",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-File",
+        ".ps_gallery/Publish-ToolCraft.ps1",
+        "-DryRun:${input:publishDryRun}"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "PS: Test locally (Import & Get-ToolCraftInfo)",
+      "type": "shell",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "Import-Module .\\.ps_gallery\\ToolCraft -Force; Get-ToolCraftInfo | Format-List *"
+      ],
+      "group": "test",
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "publishDryRun",
+      "type": "pickString",
+      "description": "Run as DryRun?",
+      "options": ["true", "false"],
+      "default": "true"
+    }
+  ]
+}

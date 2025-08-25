@@ -3,28 +3,28 @@
     RootModule        = 'ToolCraft.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '0.1.0'
+    ModuleVersion     = '0.1.1'
 
     # Supported PSEditions
-    CompatiblePSEditions = @('Desktop','Core')
+    CompatiblePSEditions = @('Core')
 
     # ID used to uniquely identify this module
     GUID              = 'a3a8299e-8d43-44f9-9a72-5a0c2d2ec7a0'
 
     # Author of this module
-    Author            = 'SpikingNeurons'
+    Author            = 'Praveen Kulkarni'
 
     # Company or vendor of this module
-    CompanyName       = 'SpikingNeurons'
+    CompanyName       = 'Spiking Neurons'
 
     # Copyright statement for this module
-    Copyright         = '(c) 2025 SpikingNeurons. All rights reserved.'
+    Copyright         = '(c) 2025 Spiking Neurons. All rights reserved.'
 
     # Description of the functionality provided by this module
-    Description       = 'ToolCraft PowerShell utilities for the toolcraft repository.'
+    Description       = 'ToolCraft PowerShell utilities for the toolcraft repository. Visit https://toolcraft.spikingneurons.com for more information.'
 
-    # Minimum version of the Windows PowerShell engine required by this module
-    PowerShellVersion = '5.1'
+    # Minimum version of the PowerShell engine required by this module (PowerShell 7+)
+    PowerShellVersion = '7.0'
 
     # Functions to export from this module
     FunctionsToExport = @('Get-ToolCraftInfo')
@@ -41,7 +41,7 @@
     PrivateData       = @{
         PSData = @{
             Tags        = @('ToolCraft','Utilities')
-            ProjectUri  = 'https://github.com/SpikingNeurons/toolcraft'
+            ProjectUri  = 'https://toolcraft.spikingneurons.com'
             LicenseUri  = 'https://github.com/SpikingNeurons/toolcraft/blob/main/LICENSE'
             IconUri     = ''
             ReleaseNotes= 'Initial preview release.'

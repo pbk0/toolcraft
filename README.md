@@ -3,6 +3,8 @@ Note: To install packages from https://www.powershellgallery.com requires the la
 
 Install-Module -Name PowerShellGet -RequiredVersion 2.2.5 -Force
 
+winget install --id Microsoft.NuGet --accept-source-agreements --accept-package-agreements
+
 
 winget install Microsoft.DotNet.SDK.8
 winget install Microsoft.DotNet.Runtime.2_1
