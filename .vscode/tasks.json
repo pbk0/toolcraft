@@ -7,33 +7,109 @@
       "command": "pwsh",
       "args": [
         "-NoProfile",
-        "-File",
-        ".ps_gallery/Publish-ToolCraft.ps1",
-        "-DryRun:${input:publishDryRun}"
+        "-Command",
+        "${input:publishAction}"
       ],
       "group": "build",
       "problemMatcher": []
     },
     {
-      "label": "PS: Test locally (Import & Get-ToolCraftInfo)",
+      "label": "PS: Local",
       "type": "shell",
       "command": "pwsh",
       "args": [
         "-NoProfile",
         "-Command",
-        "Import-Module .\\.ps_gallery\\ToolCraft -Force; Get-ToolCraftInfo | Format-List *"
+        "${input:localAction}"
       ],
       "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "PS: Gallery",
+      "type": "shell",
+      "command": "pwsh",
+      "args": [
+        "-NoProfile",
+        "-Command",
+        "${input:galleryAction}"
+      ],
+      "group": "build",
       "problemMatcher": []
     }
   ],
   "inputs": [
     {
-      "id": "publishDryRun",
+      "id": "publishAction",
       "type": "pickString",
-      "description": "Run as DryRun?",
-      "options": ["true", "false"],
-      "default": "true"
+      "description": "Select publish action:",
+      "options": [
+        {
+          "label": "DryRun (Validate manifest)",
+          "value": "pwsh -NoProfile -File .ps_gallery/Publish-ToolCraft.ps1 -DryRun"
+        },
+        {
+          "label": "Publish (Actual publish to PSGallery)",
+          "value": "pwsh -NoProfile -File .ps_gallery/Publish-ToolCraft.ps1"
+        }
+      ],
+      "default": "pwsh -NoProfile -File .ps_gallery/Publish-ToolCraft.ps1 -DryRun"
+    },
+    {
+      "id": "galleryAction",
+      "type": "pickString",
+      "description": "Select PowerShell Gallery action:",
+      "options": [
+        {
+          "label": "Install (Install-Module from PSGallery)",
+          "value": "Install-Module -Name ToolCraft -Scope CurrentUser -Repository PSGallery -Force"
+        },
+        {
+          "label": "Import (Import-Module)",
+          "value": "Import-Module ToolCraft -Force"
+        },
+        {
+          "label": "Update (Update-Module to latest)",
+          "value": "Update-Module -Name ToolCraft"
+        },
+        {
+          "label": "Uninstall (Uninstall-Module)",
+          "value": "Uninstall-Module -Name ToolCraft"
+        }
+      ],
+      "default": "Install-Module -Name ToolCraft -Scope CurrentUser -Repository PSGallery -Force"
+    },
+    {
+      "id": "localAction",
+      "type": "pickString",
+      "description": "Select local testing action:",
+      "options": [
+        {
+          "label": "Validate manifest (Test-ModuleManifest)",
+          "value": "Test-ModuleManifest .\\.ps_gallery\\ToolCraft\\ToolCraft.psd1"
+        },
+        {
+          "label": "Import & Get-ToolCraftInfo",
+          "value": "Import-Module .\\.ps_gallery\\ToolCraft -Force; Get-ToolCraftInfo | Format-List *"
+        },
+        {
+          "label": "Import from local folder",
+          "value": "Import-Module .\\.ps_gallery\\ToolCraft -Force"
+        },
+        {
+          "label": "Verify Get-ToolCraftInfo command",
+          "value": "Get-ToolCraftInfo"
+        },
+        {
+          "label": "Remove from session",
+          "value": "Remove-Module ToolCraft -ErrorAction SilentlyContinue"
+        },
+        {
+          "label": "Import via PSModulePath",
+          "value": "$env:PSModulePath=([string]::Join(';',(Resolve-Path .\\.ps_gallery),$env:PSModulePath)); Import-Module ToolCraft -Force; Get-ToolCraftInfo"
+        }
+      ],
+      "default": "Import-Module .\\.ps_gallery\\ToolCraft -Force; Get-ToolCraftInfo | Format-List *"
     }
   ]
 }
