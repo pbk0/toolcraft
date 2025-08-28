@@ -1,90 +1,78 @@
 # Installation
 
+ToolCraft can be installed using various methods depending on your needs.
+
 ## Requirements
 
 - Python 3.9 or higher
-- pip or uv package manager
+- pip (usually comes with Python)
 
 ## Install from PyPI
 
-### Using pip
+The easiest way to install ToolCraft is from PyPI using pip:
 
 ```bash
 pip install toolcraft
 ```
 
-### Using uv (recommended)
+## Install from Source
+
+To install the latest development version from source:
 
 ```bash
-uv add toolcraft
+git clone https://github.com/SpikingNeurons/toolcraft.git
+cd toolcraft
+pip install -e .
 ```
 
 ## Development Installation
 
-If you want to contribute to ToolCraft or use the latest development version:
+If you want to contribute to ToolCraft or need the development dependencies:
 
 ```bash
-# Clone the repository
 git clone https://github.com/SpikingNeurons/toolcraft.git
 cd toolcraft
-
-# Install with all development dependencies
-uv sync --all-extras
+pip install -e ".[dev]"
 ```
-
-## Optional Dependencies
-
-ToolCraft comes with several optional dependency groups:
-
-### Development Dependencies
-
-```bash
-pip install toolcraft[dev]
-# or
-uv add toolcraft --extra dev
-```
-
-Includes:
-- pytest (testing)
-- black (code formatting)
-- isort (import sorting)
-- flake8 (linting)
-- mypy (type checking)
-- pre-commit (git hooks)
-
-### Documentation Dependencies
-
-```bash
-pip install toolcraft[docs]
-# or
-uv add toolcraft --extra docs
-```
-
-Includes:
-- sphinx (documentation generation)
-- sphinx-rtd-theme (documentation theme)
-- myst-parser (Markdown support)
-
-### Testing Dependencies
-
-```bash
-pip install toolcraft[test]
-# or
-uv add toolcraft --extra test
-```
-
-Includes:
-- pytest (testing framework)
-- pytest-cov (coverage reporting)
-- pytest-xdist (parallel testing)
 
 ## Verify Installation
 
-After installation, you can verify that ToolCraft is working:
+To verify that ToolCraft is installed correctly:
 
 ```bash
 toolcraft --version
-toolcraft --hello
 ```
 
-You should see version information and a greeting message.
+You should see the version number printed to the console.
+
+## Troubleshooting
+
+### Python Version Issues
+
+ToolCraft requires Python 3.9 or higher. Check your Python version:
+
+```bash
+python --version
+```
+
+### Permission Issues
+
+If you encounter permission issues during installation, try:
+
+```bash
+pip install --user toolcraft
+```
+
+### Virtual Environment
+
+We recommend using a virtual environment:
+
+```bash
+python -m venv toolcraft-env
+# On Windows:
+toolcraft-env\Scripts\activate
+# On macOS/Linux:
+source toolcraft-env/bin/activate
+
+pip install toolcraft
+```

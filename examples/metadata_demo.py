@@ -2,7 +2,7 @@
 """
 Example script showing how metadata is handled in ToolCraft.
 
-This demonstrates the modern approach where metadata is defined once in 
+This demonstrates the modern approach where metadata is defined once in
 pyproject.toml and accessed dynamically in the package.
 """
 

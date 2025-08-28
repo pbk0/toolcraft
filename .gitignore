@@ -57,6 +57,8 @@ Desktop.ini
 *.sqlite3
 *.db
 
+.pytest_cache
+
 # Ignore secrets
 *.pem
 *.key

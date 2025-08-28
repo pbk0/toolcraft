@@ -1,73 +1,77 @@
 # Quick Start
 
-This guide will help you get started with ToolCraft quickly.
+This guide will help you get started with ToolCraft in just a few minutes.
 
 ## Basic Usage
 
-### Python API
-
-```python
-from toolcraft import hello
-
-# Get a greeting message
-message = hello()
-print(message)  # "Hello from ToolCraft!"
-```
+After installing ToolCraft, you can start using it immediately:
 
 ### Command Line Interface
 
-ToolCraft provides a command-line interface for easy access to its functionality:
-
 ```bash
-# Basic greeting
-toolcraft --hello
-
 # Get help
 toolcraft --help
+
+# Print a greeting message
+toolcraft --hello
 
 # Check version
 toolcraft --version
 ```
 
-## Examples
-
-### Using the Python API
+### Python API
 
 ```python
-import toolcraft
+from toolcraft import hello_message, main
 
-# Print version information
-print(f"ToolCraft version: {toolcraft.__version__}")
+# Use the greeting function
+message = hello_message()
+print(message)  # Output: Hello from ToolCraft!
 
-# Use the main functionality
-result = toolcraft.hello()
-print(result)
+# Access version information
+from toolcraft import __version__
+print(f"ToolCraft version: {__version__}")
 ```
 
-### Command Line Examples
+## Your First Script
+
+Create a simple Python script that uses ToolCraft:
+
+```python
+#!/usr/bin/env python3
+"""My first ToolCraft script."""
+
+from toolcraft import hello_message
+
+def main():
+    """Main function."""
+    greeting = hello_message()
+    print(f"ToolCraft says: {greeting}")
+    
+    # Add your automation logic here
+    print("Ready to automate your workflow!")
+
+if __name__ == "__main__":
+    main()
+```
+
+Save this as `my_script.py` and run it:
 
 ```bash
-# Show help for all available commands
-toolcraft --help
-
-# Display version information
-toolcraft --version
-
-# Run the hello command
-toolcraft --hello
+python my_script.py
 ```
 
 ## Next Steps
 
-- Explore the [API Reference](api.rst) for detailed documentation
-- Check out [Contributing](contributing.md) if you want to contribute
-- Read the [Installation Guide](installation.md) for advanced installation options
+Now that you have ToolCraft working, explore these areas:
 
-## Getting Help
+- [User Guide](user_guide/index) - Learn about all features
+- [CLI Reference](user_guide/cli) - Complete command-line documentation
+- [Examples](user_guide/examples) - Real-world usage examples
+- [API Reference](api/index) - Complete API documentation
 
-If you need help:
+## Need Help?
 
-1. Check the [API documentation](api.rst)
-2. Look at the [examples repository](https://github.com/SpikingNeurons/toolcraft/tree/main/examples)
-3. Open an issue on [GitHub](https://github.com/SpikingNeurons/toolcraft/issues)
-4. Start a discussion on [GitHub Discussions](https://github.com/SpikingNeurons/toolcraft/discussions)
+- Check the [User Guide](user_guide/index) for detailed documentation
+- Look at [Examples](user_guide/examples) for common use cases
+- Visit our [GitHub repository](https://github.com/SpikingNeurons/toolcraft) for issues and discussions
