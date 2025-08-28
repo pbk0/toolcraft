@@ -1,0 +1,32 @@
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include pyproject.toml
+include .pre-commit-config.yaml
+
+recursive-include src *.py
+recursive-include tests *.py
+recursive-include docs *.md *.rst *.py Makefile
+recursive-include scripts *.py *.sh *.ps1
+
+# Exclude development and build artifacts
+recursive-exclude * __pycache__
+recursive-exclude * *.py[co]
+recursive-exclude * *.so
+recursive-exclude * .DS_Store
+recursive-exclude * Thumbs.db
+exclude .gitignore
+exclude .env*
+exclude uv.lock
+prune .git
+prune .github
+prune .vscode
+prune .venv
+prune build
+prune dist
+prune *.egg-info
+prune htmlcov
+prune .pytest_cache
+prune .mypy_cache
+prune docs/_build
