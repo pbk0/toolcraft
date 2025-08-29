@@ -13,12 +13,31 @@ import sys
 import webbrowser
 from pathlib import Path
 
+try:
+    import tomllib
+except ImportError:
+    import tomli as tomllib
+
+
+def load_config() -> dict:
+    """Load configuration from pyproject.toml."""
+    try:
+        with open("pyproject.toml", "rb") as f:
+            config = tomllib.load(f)
+        return config.get("tool", {}).get("build_tools", {})
+    except (FileNotFoundError, Exception):
+        return {}
+
+
+# Load configuration
+CONFIG = load_config()
+
 
 def run_uv_command(cmd: list[str], description: str) -> bool:
     """Run a uv command and return success status."""
     print(f"🔨 {description}...")
     try:
-        result = subprocess.run(["uv"] + cmd, check=True)
+        subprocess.run(["uv"] + cmd, check=True)
         print(f"✅ {description} completed successfully")
         return True
     except subprocess.CalledProcessError as e:
@@ -30,7 +49,7 @@ def run_command(cmd: list[str], description: str, cwd: Path = None) -> bool:
     """Run a command and return success status."""
     print(f"🔨 {description}...")
     try:
-        result = subprocess.run(cmd, check=True, cwd=cwd or Path.cwd())
+        subprocess.run(cmd, check=True, cwd=cwd or Path.cwd())
         print(f"✅ {description} completed successfully")
         return True
     except subprocess.CalledProcessError as e:
@@ -40,8 +59,8 @@ def run_command(cmd: list[str], description: str, cwd: Path = None) -> bool:
 
 def clean_build_dir(target: str = "all") -> bool:
     """Clean build directories."""
-    build_dir = Path("build")
-    dist_dir = Path("dist")
+    build_dir = Path(CONFIG.get("build_dir", "build"))
+    dist_dir = Path(CONFIG.get("dist_dir", "dist"))
 
     if target == "all":
         for dir_path in [build_dir, dist_dir]:
@@ -80,6 +99,7 @@ def build_docs(clean: bool = False) -> bool:
     if clean:
         clean_build_dir("docs")
 
+    docs_build_dir = CONFIG.get("docs_build_dir", "build/docs")
     return run_uv_command(
         [
             "run",
@@ -88,7 +108,7 @@ def build_docs(clean: bool = False) -> bool:
             "toolcraft",
             "docs",
             "--build_dir",
-            "build/docs",
+            docs_build_dir,
         ],
         "Building documentation",
     )
@@ -163,23 +183,33 @@ def publish_package(test: bool = False) -> bool:
 
 
 def serve_docs(
-    port: int = 8000, open_browser: bool = True, no_build: bool = False
+    port: int = None, open_browser: bool = None, no_build: bool = False
 ) -> None:
     """Build and serve documentation locally."""
-    if not no_build:
+    # Use config defaults if not specified
+    if port is None:
+        port = CONFIG.get("docs_port", 8000)
+    if open_browser is None:
+        open_browser = CONFIG.get("open_browser", True)
+
+    if not no_build and CONFIG.get("build_before_serve", True):
         if not build_docs():
             return
     else:
         # Check if docs exist
-        docs_path = Path("build/docs/toolcraft")
+        docs_build_dir = CONFIG.get("docs_build_dir", "build/docs")
+        docs_path = Path(docs_build_dir) / "toolcraft"
         if not docs_path.exists():
-            print("❌ Documentation not found. Build first with: uv run build-docs")
+            print(
+                "❌ Documentation not found. Build first with: uv run build-tools docs"
+            )
             return
 
-    cmd = ["python", "-m", "http.server", str(port), "-d", "build/docs"]
+    docs_build_dir = CONFIG.get("docs_build_dir", "build/docs")
+    cmd = ["python", "-m", "http.server", str(port), "-d", docs_build_dir]
 
     print(f"🌐 Starting local server on port {port}...")
-    print(f"📖 Documentation will be available at:")
+    print("📖 Documentation will be available at:")
     print(f"   http://localhost:{port}/toolcraft/v0.1.0/en/")
     print()
     print("Press Ctrl+C to stop the server")
@@ -195,17 +225,26 @@ def serve_docs(
         print("\n👋 Server stopped")
 
 
-def serve_coverage(port: int = 8080, open_browser: bool = True) -> None:
+def serve_coverage(port: int = None, open_browser: bool = None) -> None:
     """Serve coverage reports locally."""
-    coverage_dir = Path("build/coverage/html")
+    # Use config defaults if not specified
+    if port is None:
+        port = CONFIG.get("coverage_port", 8080)
+    if open_browser is None:
+        open_browser = CONFIG.get("open_browser", True)
+
+    coverage_dir = Path(CONFIG.get("coverage_dir", "build/coverage/html"))
     if not coverage_dir.exists():
-        print("❌ Coverage reports not found. Run tests first with: uv run test")
+        print(
+            "❌ Coverage reports not found. "
+            "Run tests first with: uv run build-tools test"
+        )
         return
 
     cmd = ["python", "-m", "http.server", str(port), "-d", str(coverage_dir)]
 
     print(f"🌐 Starting coverage server on port {port}...")
-    print(f"📊 Coverage reports will be available at:")
+    print("📊 Coverage reports will be available at:")
     print(f"   http://localhost:{port}/")
     print()
     print("Press Ctrl+C to stop the server")
@@ -264,17 +303,20 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  uv run build_tools.py clean               # Clean all build artifacts
-  uv run build_tools.py test                # Run tests with coverage
-  uv run build_tools.py docs                # Build documentation
-  uv run build_tools.py lint                # Run linting
-  uv run build_tools.py format              # Format code
-  uv run build_tools.py build               # Build distribution
-  uv run build_tools.py publish --test      # Test publish to TestPyPI
-  uv run build_tools.py publish             # Publish to PyPI
-  uv run build_tools.py check               # Run all quality checks
-  uv run build_tools.py serve-docs          # Build and serve docs
-  uv run build_tools.py serve-coverage      # Serve coverage reports
+  uv run build-tools clean               # Clean all build artifacts
+  uv run build-tools test                # Run tests with coverage
+  uv run build-tools docs                # Build documentation
+  uv run build-tools lint                # Run linting
+  uv run build-tools format              # Format code
+  uv run build-tools build               # Build distribution
+  uv run build-tools publish --test      # Test publish to TestPyPI
+  uv run build-tools publish             # Publish to PyPI
+  uv run build-tools check               # Run all quality checks
+  uv run build-tools serve-docs          # Build and serve docs
+  uv run build-tools serve-coverage      # Serve coverage reports
+
+Alternative usage:
+  uv run build_tools.py <command>        # Direct script usage
 
 Direct uv equivalents:
   uv run pytest --cov=toolcraft             # test
@@ -284,6 +326,9 @@ Direct uv equivalents:
   uv build                                  # build
   uv publish --index testpypi               # publish --test
   uv publish                                # publish
+
+Configuration:
+  Settings are read from [tool.build_tools] section in pyproject.toml
         """,
     )
 
@@ -312,7 +357,10 @@ Direct uv equivalents:
         "serve-docs", help="Build and serve documentation"
     )
     serve_docs_parser.add_argument(
-        "--port", type=int, default=8000, help="Port to serve on"
+        "--port",
+        type=int,
+        default=CONFIG.get("docs_port", 8000),
+        help="Port to serve on",
     )
     serve_docs_parser.add_argument(
         "--no-browser", action="store_true", help="Don't open browser"
@@ -327,7 +375,10 @@ Direct uv equivalents:
         "serve-coverage", help="Serve coverage reports"
     )
     serve_cov_parser.add_argument(
-        "--port", type=int, default=8080, help="Port to serve on"
+        "--port",
+        type=int,
+        default=CONFIG.get("coverage_port", 8080),
+        help="Port to serve on",
     )
     serve_cov_parser.add_argument(
         "--no-browser", action="store_true", help="Don't open browser"

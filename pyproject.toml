@@ -41,6 +41,7 @@ classifiers = [
 dependencies = [
     "click>=8.0.0",
     "rich>=10.0.0",
+    "tomli>=1.2.0; python_version<'3.11'",
 ]
 
 [project.optional-dependencies]
@@ -50,6 +51,7 @@ dev = [
     "black>=23.0.0",
     "isort>=5.0.0",
     "flake8>=6.0.0",
+    "flake8-pyproject>=1.2.3",
     "mypy>=1.0.0",
     "pre-commit>=3.0.0",
 ]
@@ -64,6 +66,7 @@ test = [
 
 [project.scripts]
 toolcraft = "toolcraft.cli:toolcraft_cli"
+build-tools = "build_tools:main"
 
 [project.urls]
 Homepage = "https://github.com/SpikingNeurons/toolcraft"
@@ -159,6 +162,22 @@ extend-exclude = '''
 )/
 '''
 
+# Build tools configuration
+[tool.build_tools]
+# Default ports for serving
+docs_port = 8000
+coverage_port = 8080
+
+# Default behavior flags
+open_browser = true
+build_before_serve = true
+
+# Build directories
+build_dir = "build"
+dist_dir = "dist"
+docs_build_dir = "build/docs"
+coverage_dir = "build/coverage/html"
+
 # Import sorting
 [tool.isort]
 profile = "black"
@@ -190,9 +209,13 @@ disallow_untyped_defs = false
 
 [dependency-groups]
 dev = [
+    "black>=25.1.0",
     "flake8>=7.3.0",
+    "flake8-pyproject>=1.2.3",
     "isort>=6.0.1",
     "mypy>=1.17.1",
+    "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
 ]
 
 # Flake8 configuration

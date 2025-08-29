@@ -26,7 +26,10 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
 3. **Set Up Development Environment**
    
    ```bash
-   # Create a virtual environment
+   # Install with uv (recommended)
+   uv sync --all-extras
+   
+   # Or create a virtual environment manually
    python -m venv venv
    
    # Activate it
@@ -42,15 +45,72 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
 4. **Verify Setup**
    
    ```bash
-   # Run tests
-   pytest
+   # Using build tools (recommended)
+   uv run build-tools test
+   uv run build-tools lint
    
-   # Check code style
-   black --check .
-   isort --check-only .
-   flake8 .
-   mypy .
+   # Or run individual tools
+   uv run pytest
+   uv run black --check .
+   uv run isort --check-only .
+   uv run flake8 .
+   uv run mypy .
    ```
+
+## Build Tools
+
+ToolCraft includes a comprehensive build management system with two access methods:
+
+### Script Entry Point (Recommended)
+
+```bash
+# Development workflow
+uv run build-tools test         # Run tests with coverage
+uv run build-tools format       # Format code with black and isort
+uv run build-tools lint         # Run linting checks
+uv run build-tools typecheck    # Run mypy type checking
+uv run build-tools check        # Run all quality checks
+
+# Documentation
+uv run build-tools docs         # Build documentation
+uv run build-tools serve-docs   # Build and serve docs locally
+uv run build-tools serve-coverage  # Serve coverage reports
+
+# Distribution
+uv run build-tools clean        # Clean build artifacts
+uv run build-tools build        # Build distribution packages
+uv run build-tools publish --test  # Publish to TestPyPI
+```
+
+### Direct Script Access
+
+```bash
+# Alternative usage (same functionality)
+uv run build_tools.py test
+uv run build_tools.py format
+# ... etc
+```
+
+### Configuration
+
+Build tools are configured in `pyproject.toml` under the `[tool.build_tools]` section:
+
+```toml
+[tool.build_tools]
+# Default ports for serving
+docs_port = 8000
+coverage_port = 8080
+
+# Default behavior flags
+open_browser = true
+build_before_serve = true
+
+# Build directories
+build_dir = "build"
+dist_dir = "dist"
+docs_build_dir = "build/docs"
+coverage_dir = "build/coverage/html"
+```
 
 ## Development Workflow
 
@@ -73,10 +133,14 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
    
    ```bash
    # Run all tests
-   pytest
+   uv run build-tools test
    
    # Run with coverage
-   pytest --cov=toolcraft
+   uv run build-tools test
+   
+   # Or use direct tools
+   uv run pytest
+   uv run pytest --cov=toolcraft
    
    # Test CLI functionality
    toolcraft --hello
@@ -86,12 +150,14 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
    
    ```bash
    # Format code
-   black .
-   isort .
+   uv run build-tools format
    
    # Check for issues
-   flake8 .
-   mypy .
+   uv run build-tools lint
+   uv run build-tools typecheck
+   
+   # Run all checks
+   uv run build-tools check
    ```
 
 ### Committing Changes

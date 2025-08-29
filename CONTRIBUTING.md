@@ -35,6 +35,9 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
 3. **Run Tests**
    ```bash
    # Using build tools (recommended)
+   uv run build-tools test
+   
+   # Or using the direct script
    uv run build_tools.py test
    
    # Or directly with uv
@@ -44,12 +47,15 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
 4. **Check Code Quality**
    ```bash
    # Run all quality checks at once
-   uv run build_tools.py check
+   uv run build-tools check
    
    # Or run individual checks
-   uv run build_tools.py format    # Format code
-   uv run build_tools.py lint      # Check linting
-   uv run build_tools.py typecheck # Type checking
+   uv run build-tools format    # Format code
+   uv run build-tools lint      # Check linting
+   uv run build-tools typecheck # Type checking
+   
+   # Or use the direct script
+   uv run build_tools.py check
    
    # Or use uv directly
    uv run black .
@@ -69,35 +75,38 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
    - Go to GitHub and create a pull request
    - Describe your changes
    - Link any relevant issues
-   - Ensure all checks pass (CI will run `uv run build_tools.py check`)
+   - Ensure all checks pass (CI will run `uv run build-tools check`)
 
 ## Build Tools
 
-ToolCraft includes a comprehensive build management script (`build_tools.py`) that provides convenient commands for all development tasks:
+ToolCraft includes a comprehensive build management script (`build_tools.py`) that provides convenient commands for all development tasks. You can access it via the script entry point or directly:
 
 ### Available Commands
 
 ```bash
-# Development workflow
-uv run build_tools.py clean               # Clean all build artifacts
-uv run build_tools.py test                # Run tests with coverage
-uv run build_tools.py test --no-coverage  # Run tests without coverage
-uv run build_tools.py format              # Format code with black and isort
-uv run build_tools.py lint                # Run all linting checks
-uv run build_tools.py typecheck           # Run mypy type checking
-uv run build_tools.py check               # Run all quality checks
+# Using the script entry point (recommended)
+uv run build-tools clean               # Clean all build artifacts
+uv run build-tools test                # Run tests with coverage
+uv run build-tools test --no-coverage  # Run tests without coverage
+uv run build-tools format              # Format code with black and isort
+uv run build-tools lint                # Run all linting checks
+uv run build-tools typecheck           # Run mypy type checking
+uv run build-tools check               # Run all quality checks
 
 # Documentation
-uv run build_tools.py docs                # Build documentation
-uv run build_tools.py docs --clean        # Clean build and rebuild docs
-uv run build_tools.py serve-docs          # Build and serve docs locally
-uv run build_tools.py serve-docs --no-build  # Serve existing docs
-uv run build_tools.py serve-coverage      # Serve coverage reports
+uv run build-tools docs                # Build documentation
+uv run build-tools docs --clean        # Clean build and rebuild docs
+uv run build-tools serve-docs          # Build and serve docs locally
+uv run build-tools serve-docs --no-build  # Serve existing docs
+uv run build-tools serve-coverage      # Serve coverage reports
 
 # Distribution
-uv run build_tools.py build               # Build distribution packages
-uv run build_tools.py publish --test      # Publish to TestPyPI
-uv run build_tools.py publish             # Publish to PyPI
+uv run build-tools build               # Build distribution packages
+uv run build-tools publish --test      # Publish to TestPyPI
+uv run build-tools publish             # Publish to PyPI
+
+# Alternative: Direct script usage
+uv run build_tools.py <command>        # Same functionality
 ```
 
 ### Direct uv Commands
@@ -133,13 +142,15 @@ We use several tools to maintain code quality:
 - **mypy**: Type checking
 - **pytest**: Testing
 
-Use `uv run build_tools.py check` to run all quality checks at once, or run individual tools as needed.
+Configuration for these tools is defined in `pyproject.toml` under the `[tool.*]` sections, including a `[tool.build_tools]` section for build script configuration.
+
+Use `uv run build-tools check` to run all quality checks at once, or run individual tools as needed.
 
 ## Testing
 
 - Write tests for all new functionality
-- Ensure all tests pass before submitting PR: `uv run build_tools.py test`
-- Aim for high test coverage (reports available via `uv run build_tools.py serve-coverage`)
+- Ensure all tests pass before submitting PR: `uv run build-tools test`
+- Aim for high test coverage (reports available via `uv run build-tools serve-coverage`)
 - Use descriptive test names
 
 ## Documentation
@@ -147,8 +158,8 @@ Use `uv run build_tools.py check` to run all quality checks at once, or run indi
 - Update docstrings for new functions/classes
 - Add examples where helpful
 - Update README.md if needed
-- Build docs locally to verify changes: `uv run build_tools.py docs`
-- Serve docs locally for review: `uv run build_tools.py serve-docs`
+- Build docs locally to verify changes: `uv run build-tools docs`
+- Serve docs locally for review: `uv run build-tools serve-docs`
 
 ## Reporting Issues
 

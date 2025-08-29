@@ -30,13 +30,16 @@ docs/
 To build the documentation locally:
 
 ```bash
-# Using uv (recommended)
+# Using build tools (recommended)
+uv run build-tools docs
+
+# Or using the direct script
+uv run build_tools.py docs
+
+# Or using uv directly
 uv run doc-builder build toolcraft docs --build_dir build/docs
 
-# Using the build tools (recommended)
-uv run python build_tools.py docs
-
-# Or with pip
+# Using pip
 pip install hf-doc-builder
 doc-builder build toolcraft docs --build_dir build/docs
 ```
@@ -47,10 +50,13 @@ To preview the documentation locally:
 
 ```bash
 # Using build tools (recommended)
-uv run python build_tools.py serve-docs
+uv run build-tools serve-docs
 
 # Serve existing docs without rebuilding
-uv run python build_tools.py serve-docs --no-build
+uv run build-tools serve-docs --no-build
+
+# Or using the direct script
+uv run build_tools.py serve-docs
 
 # Or manually start a server
 python -m http.server 8000 -d build/docs
@@ -65,7 +71,10 @@ To perform a clean build:
 
 ```bash
 # Using build tools
-uv run python build_tools.py docs --clean
+uv run build-tools docs --clean
+
+# Or using the direct script
+uv run build_tools.py docs --clean
 
 # Or manually
 uv run doc-builder build toolcraft docs --build_dir build/docs --clean
@@ -77,25 +86,28 @@ The unified build tools provide comprehensive build management:
 
 ```bash
 # Documentation
-uv run python build_tools.py docs                    # Build docs
-uv run python build_tools.py docs --clean            # Clean build docs
-uv run python build_tools.py serve-docs              # Build and serve docs
-uv run python build_tools.py serve-docs --no-build   # Serve existing docs
+uv run build-tools docs                    # Build docs
+uv run build-tools docs --clean            # Clean build docs
+uv run build-tools serve-docs              # Build and serve docs
+uv run build-tools serve-docs --no-build   # Serve existing docs
 
 # Testing and Coverage
-uv run python build_tools.py test                    # Run tests with coverage
-uv run python build_tools.py serve-coverage          # Serve coverage reports
+uv run build-tools test                    # Run tests with coverage
+uv run build-tools serve-coverage          # Serve coverage reports
 
 # Code Quality
-uv run python build_tools.py lint                    # Run linting
-uv run python build_tools.py format                  # Format code
-uv run python build_tools.py typecheck               # Type checking
-uv run python build_tools.py check                   # Run all checks
+uv run build-tools lint                    # Run linting
+uv run build-tools format                  # Format code
+uv run build-tools typecheck               # Type checking
+uv run build-tools check                   # Run all checks
 
 # Build Management
-uv run python build_tools.py clean                   # Clean all build artifacts
-uv run python build_tools.py clean --target docs     # Clean docs only
-uv run python build_tools.py build                   # Build distribution packages
+uv run build-tools clean                   # Clean all build artifacts
+uv run build-tools clean --target docs     # Clean docs only
+uv run build-tools build                   # Build distribution packages
+
+# Alternative: Direct script usage
+uv run build_tools.py <command>            # Same functionality as above
 ```
 
 ## Configuration

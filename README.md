@@ -85,28 +85,38 @@ uv run pre-commit install
 
 ### Build Tools
 
-ToolCraft includes a comprehensive build management script that streamlines development workflows:
+ToolCraft includes a comprehensive build management script that streamlines development workflows. You can use it in two ways:
 
+**Using the convenient script entry point (recommended):**
 ```bash
 # Quick development commands
-uv run build_tools.py check      # Run all quality checks
-uv run build_tools.py test       # Run tests with coverage
-uv run build_tools.py format     # Format code
-uv run build_tools.py docs       # Build documentation
-uv run build_tools.py serve-docs # Serve docs locally
+uv run build-tools check      # Run all quality checks
+uv run build-tools test       # Run tests with coverage
+uv run build-tools format     # Format code
+uv run build-tools docs       # Build documentation
+uv run build-tools serve-docs # Serve docs locally
 
 # See all available commands
-uv run build_tools.py --help
+uv run build-tools --help
+```
+
+**Or using the direct script:**
+```bash
+uv run build_tools.py check   # Same functionality
+uv run build_tools.py --help  # See all commands
 ```
 
 ### Running Tests
 
 ```bash
 # Run all tests with coverage (using build tools)
-uv run build_tools.py test
+uv run build-tools test
 
 # Run tests without coverage
-uv run build_tools.py test --no-coverage
+uv run build-tools test --no-coverage
+
+# Or use the direct script
+uv run build_tools.py test
 
 # Or use uv directly
 uv run pytest
@@ -120,16 +130,19 @@ uv run pytest tests/test_main.py
 
 ```bash
 # Format code (using build tools)
-uv run build_tools.py format
+uv run build-tools format
 
 # Check code formatting and linting
-uv run build_tools.py lint
+uv run build-tools lint
 
 # Run type checking
-uv run build_tools.py typecheck
+uv run build-tools typecheck
 
 # Run all quality checks
-uv run build_tools.py check
+uv run build-tools check
+
+# Or use the direct script
+uv run build_tools.py format
 
 # Or use uv directly
 uv run black .
@@ -142,13 +155,16 @@ uv run mypy toolcraft
 
 ```bash
 # Build documentation (using build tools)
-uv run build_tools.py docs
+uv run build-tools docs
 
 # Build and serve documentation locally
-uv run build_tools.py serve-docs
+uv run build-tools serve-docs
 
 # Serve documentation without rebuilding
-uv run build_tools.py serve-docs --no-build
+uv run build-tools serve-docs --no-build
+
+# Or use the direct script
+uv run build_tools.py docs
 
 # Or use uv directly
 uv sync --extra docs
@@ -159,16 +175,19 @@ uv run doc-builder build toolcraft docs --build_dir build/docs
 
 ```bash
 # Clean build artifacts
-uv run build_tools.py clean
+uv run build-tools clean
 
 # Build distribution packages
-uv run build_tools.py build
+uv run build-tools build
 
 # Publish to TestPyPI
-uv run build_tools.py publish --test
+uv run build-tools publish --test
 
 # Publish to PyPI
-uv run build_tools.py publish
+uv run build-tools publish
+
+# Or use the direct script
+uv run build_tools.py clean
 
 # Or use uv directly
 uv build
