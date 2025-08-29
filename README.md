@@ -100,12 +100,6 @@ uv run build-tools serve-docs # Serve docs locally
 uv run build-tools --help
 ```
 
-**Or using the direct script:**
-```bash
-uv run build_tools.py check   # Same functionality
-uv run build_tools.py --help  # See all commands
-```
-
 ### Running Tests
 
 ```bash
@@ -114,9 +108,6 @@ uv run build-tools test
 
 # Run tests without coverage
 uv run build-tools test --no-coverage
-
-# Or use the direct script
-uv run build_tools.py test
 
 # Or use uv directly
 uv run pytest
@@ -141,9 +132,6 @@ uv run build-tools typecheck
 # Run all quality checks
 uv run build-tools check
 
-# Or use the direct script
-uv run build_tools.py format
-
 # Or use uv directly
 uv run black .
 uv run isort .
@@ -162,9 +150,6 @@ uv run build-tools serve-docs
 
 # Serve documentation without rebuilding
 uv run build-tools serve-docs --no-build
-
-# Or use the direct script
-uv run build_tools.py docs
 
 # Or use uv directly
 uv sync --extra docs
@@ -185,9 +170,6 @@ uv run build-tools publish --test
 
 # Publish to PyPI
 uv run build-tools publish
-
-# Or use the direct script
-uv run build_tools.py clean
 
 # Or use uv directly
 uv build
