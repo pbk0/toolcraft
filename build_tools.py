@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-Build management script for ToolCraft.
+Build management script for ToolCraft using uv.
 
 This script provides convenient commands for managing all build outputs
-including documentation, test coverage, and distribution packages.
+using uv's native capabilities where possible.
 """
 
 import argparse
@@ -12,6 +12,18 @@ import subprocess
 import sys
 import webbrowser
 from pathlib import Path
+
+
+def run_uv_command(cmd: list[str], description: str) -> bool:
+    """Run a uv command and return success status."""
+    print(f"🔨 {description}...")
+    try:
+        result = subprocess.run(["uv"] + cmd, check=True)
+        print(f"✅ {description} completed successfully")
+        return True
+    except subprocess.CalledProcessError as e:
+        print(f"❌ {description} failed with exit code {e.returncode}")
+        return False
 
 
 def run_command(cmd: list[str], description: str, cwd: Path = None) -> bool:
@@ -29,14 +41,16 @@ def run_command(cmd: list[str], description: str, cwd: Path = None) -> bool:
 def clean_build_dir(target: str = "all") -> bool:
     """Clean build directories."""
     build_dir = Path("build")
+    dist_dir = Path("dist")
 
     if target == "all":
-        if build_dir.exists():
-            print("🧹 Cleaning entire build directory...")
-            shutil.rmtree(build_dir)
-            print("✅ Build directory cleaned")
-        else:
-            print("ℹ️  Build directory doesn't exist, nothing to clean")
+        for dir_path in [build_dir, dist_dir]:
+            if dir_path.exists():
+                print(f"🧹 Cleaning {dir_path}...")
+                shutil.rmtree(dir_path)
+                print(f"✅ {dir_path} cleaned")
+            else:
+                print(f"ℹ️  {dir_path} doesn't exist, nothing to clean")
         return True
 
     # Clean specific targets
@@ -44,8 +58,7 @@ def clean_build_dir(target: str = "all") -> bool:
         "docs": build_dir / "docs",
         "coverage": build_dir / "coverage",
         "pytest": build_dir / "pytest_cache",
-        "mypy": build_dir / "mypy_cache",
-        "dist": Path("dist"),
+        "dist": dist_dir,
     }
 
     if target in targets:
@@ -63,76 +76,90 @@ def clean_build_dir(target: str = "all") -> bool:
 
 
 def build_docs(clean: bool = False) -> bool:
-    """Build the documentation."""
+    """Build the documentation using uv."""
     if clean:
         clean_build_dir("docs")
 
-    cmd = [
-        "uv",
-        "run",
-        "doc-builder",
-        "build",
-        "toolcraft",
-        "docs",
-        "--build_dir",
-        "build/docs",
-    ]
-    return run_command(cmd, "Building documentation")
+    return run_uv_command(
+        [
+            "run",
+            "doc-builder",
+            "build",
+            "toolcraft",
+            "docs",
+            "--build_dir",
+            "build/docs",
+        ],
+        "Building documentation",
+    )
 
 
 def run_tests(coverage: bool = True) -> bool:
-    """Run tests with optional coverage."""
-    cmd = ["uv", "run", "pytest"]
+    """Run tests using uv."""
+    cmd = ["run", "pytest"]
     if coverage:
         cmd.extend(["--cov=toolcraft"])
 
-    return run_command(
+    return run_uv_command(
         cmd, "Running tests with coverage" if coverage else "Running tests"
     )
 
 
 def run_type_check() -> bool:
-    """Run mypy type checking."""
-    cmd = ["uv", "run", "mypy", "toolcraft"]
-    return run_command(cmd, "Running type checks")
+    """Run mypy type checking using uv."""
+    return run_uv_command(["run", "mypy", "toolcraft"], "Running type checks")
 
 
 def run_lint() -> bool:
-    """Run code linting."""
+    """Run code linting using uv."""
     commands = [
-        (["uv", "run", "black", "--check", "."], "Checking code formatting"),
-        (["uv", "run", "isort", "--check-only", "."], "Checking import sorting"),
-        (["uv", "run", "flake8", "."], "Running flake8 linting"),
+        (["run", "black", "--check", "."], "Checking code formatting"),
+        (["run", "isort", "--check-only", "."], "Checking import sorting"),
+        (
+            ["run", "flake8", "toolcraft", "tests", "build_tools.py"],
+            "Running flake8 linting",
+        ),
     ]
 
     all_passed = True
     for cmd, desc in commands:
-        if not run_command(cmd, desc):
+        if not run_uv_command(cmd, desc):
             all_passed = False
 
     return all_passed
 
 
 def format_code() -> bool:
-    """Format code with black and isort."""
+    """Format code using uv."""
     commands = [
-        (["uv", "run", "black", "."], "Formatting code with black"),
-        (["uv", "run", "isort", "."], "Sorting imports with isort"),
+        (["run", "black", "."], "Formatting code with black"),
+        (["run", "isort", "."], "Sorting imports with isort"),
     ]
 
     all_passed = True
     for cmd, desc in commands:
-        if not run_command(cmd, desc):
+        if not run_uv_command(cmd, desc):
             all_passed = False
 
     return all_passed
 
 
 def build_package() -> bool:
-    """Build distribution packages."""
+    """Build distribution packages using uv."""
     clean_build_dir("dist")
-    cmd = ["uv", "build"]
-    return run_command(cmd, "Building distribution packages")
+    return run_uv_command(["build"], "Building distribution packages")
+
+
+def publish_package(test: bool = False) -> bool:
+    """Publish package using uv."""
+    cmd = ["publish"]
+    if test:
+        cmd.extend(["--index", "testpypi"])
+        desc = "Publishing to TestPyPI"
+    else:
+        desc = "Publishing to PyPI"
+
+    return run_uv_command(cmd, desc)
 
 
 def serve_docs(
@@ -144,11 +171,9 @@ def serve_docs(
             return
     else:
         # Check if docs exist
-        docs_path = Path("build/docs/toolcraft/v0.1.0/en")
+        docs_path = Path("build/docs/toolcraft")
         if not docs_path.exists():
-            print(
-                "❌ Documentation not found. Build first with: python build_tools.py docs"
-            )
+            print("❌ Documentation not found. Build first with: uv run build-docs")
             return
 
     cmd = ["python", "-m", "http.server", str(port), "-d", "build/docs"]
@@ -174,9 +199,7 @@ def serve_coverage(port: int = 8080, open_browser: bool = True) -> None:
     """Serve coverage reports locally."""
     coverage_dir = Path("build/coverage/html")
     if not coverage_dir.exists():
-        print(
-            "❌ Coverage reports not found. Run tests first with: python build_tools.py test"
-        )
+        print("❌ Coverage reports not found. Run tests first with: uv run test")
         return
 
     cmd = ["python", "-m", "http.server", str(port), "-d", str(coverage_dir)]
@@ -237,22 +260,30 @@ def run_all_checks() -> bool:
 def main():
     """Main function."""
     parser = argparse.ArgumentParser(
-        description="ToolCraft build management tool",
+        description="ToolCraft build management tool (now using uv)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
   python build_tools.py clean               # Clean all build artifacts
-  python build_tools.py clean --target docs # Clean only docs
   python build_tools.py test                # Run tests with coverage
   python build_tools.py docs                # Build documentation
-  python build_tools.py docs --clean        # Clean build documentation
-  python build_tools.py serve-docs          # Build and serve docs
-  python build_tools.py serve-docs --no-build # Serve existing docs
-  python build_tools.py serve-coverage      # Serve coverage reports
   python build_tools.py lint                # Run linting
   python build_tools.py format              # Format code
   python build_tools.py build               # Build distribution
+  python build_tools.py publish --test      # Test publish to TestPyPI
+  python build_tools.py publish             # Publish to PyPI
   python build_tools.py check               # Run all quality checks
+  python build_tools.py serve-docs          # Build and serve docs
+  python build_tools.py serve-coverage      # Serve coverage reports
+
+Direct uv equivalents:
+  uv run pytest --cov=toolcraft             # test
+  uv run doc-builder build toolcraft docs --build_dir build/docs  # docs
+  uv run black --check . && uv run isort --check-only .           # lint
+  uv run black . && uv run isort .          # format
+  uv build                                  # build
+  uv publish --index testpypi               # publish --test
+  uv publish                                # publish
         """,
     )
 
@@ -262,7 +293,7 @@ Examples:
     clean_parser = subparsers.add_parser("clean", help="Clean build artifacts")
     clean_parser.add_argument(
         "--target",
-        choices=["all", "docs", "coverage", "pytest", "mypy", "dist"],
+        choices=["all", "docs", "coverage", "pytest", "dist"],
         default="all",
         help="What to clean (default: all)",
     )
@@ -307,8 +338,13 @@ Examples:
     subparsers.add_parser("format", help="Format code")
     subparsers.add_parser("typecheck", help="Run type checking")
 
-    # Build command
+    # Build and publish commands
     subparsers.add_parser("build", help="Build distribution packages")
+
+    publish_parser = subparsers.add_parser("publish", help="Publish package")
+    publish_parser.add_argument(
+        "--test", action="store_true", help="Publish to TestPyPI instead of PyPI"
+    )
 
     # Check command
     subparsers.add_parser("check", help="Run all quality checks")
@@ -352,6 +388,9 @@ Examples:
 
     elif args.command == "build":
         success = build_package()
+
+    elif args.command == "publish":
+        success = publish_package(test=args.test)
 
     elif args.command == "check":
         success = run_all_checks()

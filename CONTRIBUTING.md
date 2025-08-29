@@ -34,15 +34,28 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
 
 3. **Run Tests**
    ```bash
+   # Using build tools (recommended)
+   python build_tools.py test
+   
+   # Or directly with uv
    uv run pytest
    ```
 
 4. **Check Code Quality**
    ```bash
-   uv run black src tests
-   uv run isort src tests
-   uv run flake8 src tests
-   uv run mypy src
+   # Run all quality checks at once
+   python build_tools.py check
+   
+   # Or run individual checks
+   python build_tools.py format    # Format code
+   python build_tools.py lint      # Check linting
+   python build_tools.py typecheck # Type checking
+   
+   # Or use uv directly
+   uv run black .
+   uv run isort .
+   uv run flake8 .
+   uv run mypy toolcraft
    ```
 
 5. **Commit and Push**
@@ -56,22 +69,77 @@ Thank you for your interest in contributing to ToolCraft! This guide will help y
    - Go to GitHub and create a pull request
    - Describe your changes
    - Link any relevant issues
+   - Ensure all checks pass (CI will run `python build_tools.py check`)
+
+## Build Tools
+
+ToolCraft includes a comprehensive build management script (`build_tools.py`) that provides convenient commands for all development tasks:
+
+### Available Commands
+
+```bash
+# Development workflow
+python build_tools.py clean               # Clean all build artifacts
+python build_tools.py test                # Run tests with coverage
+python build_tools.py test --no-coverage  # Run tests without coverage
+python build_tools.py format              # Format code with black and isort
+python build_tools.py lint                # Run all linting checks
+python build_tools.py typecheck           # Run mypy type checking
+python build_tools.py check               # Run all quality checks
+
+# Documentation
+python build_tools.py docs                # Build documentation
+python build_tools.py docs --clean        # Clean build and rebuild docs
+python build_tools.py serve-docs          # Build and serve docs locally
+python build_tools.py serve-docs --no-build  # Serve existing docs
+python build_tools.py serve-coverage      # Serve coverage reports
+
+# Distribution
+python build_tools.py build               # Build distribution packages
+python build_tools.py publish --test      # Publish to TestPyPI
+python build_tools.py publish             # Publish to PyPI
+```
+
+### Direct uv Commands
+
+For those who prefer using uv directly:
+
+```bash
+# Testing
+uv run pytest --cov=toolcraft
+
+# Code quality
+uv run black .
+uv run isort .
+uv run flake8 .
+uv run mypy toolcraft
+
+# Documentation
+uv run doc-builder build toolcraft docs --build_dir build/docs
+
+# Distribution
+uv build
+uv publish --index testpypi
+uv publish
+```
 
 ## Code Style
 
 We use several tools to maintain code quality:
 
 - **Black**: Code formatting
-- **isort**: Import sorting
+- **isort**: Import sorting  
 - **flake8**: Linting
 - **mypy**: Type checking
 - **pytest**: Testing
 
+Use `python build_tools.py check` to run all quality checks at once, or run individual tools as needed.
+
 ## Testing
 
 - Write tests for all new functionality
-- Ensure all tests pass before submitting PR
-- Aim for high test coverage
+- Ensure all tests pass before submitting PR: `python build_tools.py test`
+- Aim for high test coverage (reports available via `python build_tools.py serve-coverage`)
 - Use descriptive test names
 
 ## Documentation
@@ -79,7 +147,8 @@ We use several tools to maintain code quality:
 - Update docstrings for new functions/classes
 - Add examples where helpful
 - Update README.md if needed
-- Build docs locally to verify changes
+- Build docs locally to verify changes: `python build_tools.py docs`
+- Serve docs locally for review: `python build_tools.py serve-docs`
 
 ## Reporting Issues
 

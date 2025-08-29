@@ -83,13 +83,33 @@ uv sync --all-extras
 uv run pre-commit install
 ```
 
+### Build Tools
+
+ToolCraft includes a comprehensive build management script that streamlines development workflows:
+
+```bash
+# Quick development commands
+python build_tools.py check      # Run all quality checks
+python build_tools.py test       # Run tests with coverage
+python build_tools.py format     # Format code
+python build_tools.py docs       # Build documentation
+python build_tools.py serve-docs # Serve docs locally
+
+# See all available commands
+python build_tools.py --help
+```
+
 ### Running Tests
 
 ```bash
-# Run all tests
-uv run pytest
+# Run all tests with coverage (using build tools)
+python build_tools.py test
 
-# Run tests with coverage
+# Run tests without coverage
+python build_tools.py test --no-coverage
+
+# Or use uv directly
+uv run pytest
 uv run pytest --cov=toolcraft
 
 # Run specific test file
@@ -99,26 +119,61 @@ uv run pytest tests/test_main.py
 ### Code Quality
 
 ```bash
-# Format code
-uv run black toolcraft tests
-uv run isort toolcraft tests
+# Format code (using build tools)
+python build_tools.py format
 
-# Lint code
-uv run flake8 toolcraft tests
+# Check code formatting and linting
+python build_tools.py lint
 
-# Type checking
+# Run type checking
+python build_tools.py typecheck
+
+# Run all quality checks
+python build_tools.py check
+
+# Or use uv directly
+uv run black .
+uv run isort .
+uv run flake8 .
 uv run mypy toolcraft
 ```
 
 ### Building Documentation
 
 ```bash
-# Install documentation dependencies
-uv sync --extra docs
+# Build documentation (using build tools)
+python build_tools.py docs
 
-# Build documentation
-cd docs
-uv run sphinx-build -b html . _build/html
+# Build and serve documentation locally
+python build_tools.py serve-docs
+
+# Serve documentation without rebuilding
+python build_tools.py serve-docs --no-build
+
+# Or use uv directly
+uv sync --extra docs
+uv run doc-builder build toolcraft docs --build_dir build/docs
+```
+
+### Building and Publishing
+
+```bash
+# Clean build artifacts
+python build_tools.py clean
+
+# Build distribution packages
+python build_tools.py build
+
+# Publish to TestPyPI
+python build_tools.py publish --test
+
+# Publish to PyPI
+python build_tools.py publish
+
+# Or use uv directly
+uv build
+uv publish --index testpypi  # for test
+uv publish                   # for production
 ```
 
 ## Contributing
