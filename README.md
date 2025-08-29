@@ -89,24 +89,24 @@ ToolCraft includes a comprehensive build management script that streamlines deve
 
 ```bash
 # Quick development commands
-python build_tools.py check      # Run all quality checks
-python build_tools.py test       # Run tests with coverage
-python build_tools.py format     # Format code
-python build_tools.py docs       # Build documentation
-python build_tools.py serve-docs # Serve docs locally
+uv run build_tools.py check      # Run all quality checks
+uv run build_tools.py test       # Run tests with coverage
+uv run build_tools.py format     # Format code
+uv run build_tools.py docs       # Build documentation
+uv run build_tools.py serve-docs # Serve docs locally
 
 # See all available commands
-python build_tools.py --help
+uv run build_tools.py --help
 ```
 
 ### Running Tests
 
 ```bash
 # Run all tests with coverage (using build tools)
-python build_tools.py test
+uv run build_tools.py test
 
 # Run tests without coverage
-python build_tools.py test --no-coverage
+uv run build_tools.py test --no-coverage
 
 # Or use uv directly
 uv run pytest
@@ -120,16 +120,16 @@ uv run pytest tests/test_main.py
 
 ```bash
 # Format code (using build tools)
-python build_tools.py format
+uv run build_tools.py format
 
 # Check code formatting and linting
-python build_tools.py lint
+uv run build_tools.py lint
 
 # Run type checking
-python build_tools.py typecheck
+uv run build_tools.py typecheck
 
 # Run all quality checks
-python build_tools.py check
+uv run build_tools.py check
 
 # Or use uv directly
 uv run black .
@@ -142,13 +142,13 @@ uv run mypy toolcraft
 
 ```bash
 # Build documentation (using build tools)
-python build_tools.py docs
+uv run build_tools.py docs
 
 # Build and serve documentation locally
-python build_tools.py serve-docs
+uv run build_tools.py serve-docs
 
 # Serve documentation without rebuilding
-python build_tools.py serve-docs --no-build
+uv run build_tools.py serve-docs --no-build
 
 # Or use uv directly
 uv sync --extra docs
@@ -159,16 +159,16 @@ uv run doc-builder build toolcraft docs --build_dir build/docs
 
 ```bash
 # Clean build artifacts
-python build_tools.py clean
+uv run build_tools.py clean
 
 # Build distribution packages
-python build_tools.py build
+uv run build_tools.py build
 
 # Publish to TestPyPI
-python build_tools.py publish --test
+uv run build_tools.py publish --test
 
 # Publish to PyPI
-python build_tools.py publish
+uv run build_tools.py publish
 
 # Or use uv directly
 uv build

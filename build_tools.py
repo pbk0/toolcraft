@@ -264,17 +264,17 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  python build_tools.py clean               # Clean all build artifacts
-  python build_tools.py test                # Run tests with coverage
-  python build_tools.py docs                # Build documentation
-  python build_tools.py lint                # Run linting
-  python build_tools.py format              # Format code
-  python build_tools.py build               # Build distribution
-  python build_tools.py publish --test      # Test publish to TestPyPI
-  python build_tools.py publish             # Publish to PyPI
-  python build_tools.py check               # Run all quality checks
-  python build_tools.py serve-docs          # Build and serve docs
-  python build_tools.py serve-coverage      # Serve coverage reports
+  uv run build_tools.py clean               # Clean all build artifacts
+  uv run build_tools.py test                # Run tests with coverage
+  uv run build_tools.py docs                # Build documentation
+  uv run build_tools.py lint                # Run linting
+  uv run build_tools.py format              # Format code
+  uv run build_tools.py build               # Build distribution
+  uv run build_tools.py publish --test      # Test publish to TestPyPI
+  uv run build_tools.py publish             # Publish to PyPI
+  uv run build_tools.py check               # Run all quality checks
+  uv run build_tools.py serve-docs          # Build and serve docs
+  uv run build_tools.py serve-coverage      # Serve coverage reports
 
 Direct uv equivalents:
   uv run pytest --cov=toolcraft             # test
