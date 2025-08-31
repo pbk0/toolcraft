@@ -90,11 +90,11 @@ ToolCraft includes a comprehensive build management script that streamlines deve
 **Using the convenient script entry point (recommended):**
 ```bash
 # Quick development commands
-uv run build-tools check      # Run all quality checks
-uv run build-tools test       # Run tests with coverage
-uv run build-tools format     # Format code
-uv run build-tools docs       # Build documentation
-uv run build-tools serve-docs # Serve docs locally
+uv run build-tools check        # Run all quality checks
+uv run build-tools test         # Run tests with coverage
+uv run build-tools format       # Format code
+uv run build-tools docs         # Build documentation
+uv run build-tools preview-docs # Preview docs with doc-builder
 
 # See all available commands
 uv run build-tools --help
@@ -145,11 +145,11 @@ uv run mypy toolcraft
 # Build documentation (using build tools)
 uv run build-tools docs
 
-# Build and serve documentation locally
-uv run build-tools serve-docs
+# Build and preview documentation locally
+uv run build-tools preview-docs
 
-# Serve documentation without rebuilding
-uv run build-tools serve-docs --no-build
+# Preview documentation without rebuilding
+uv run build-tools preview-docs --no-build
 
 # Or use uv directly
 uv sync --extra docs

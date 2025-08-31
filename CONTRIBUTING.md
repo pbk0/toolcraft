@@ -96,8 +96,8 @@ uv run build-tools check               # Run all quality checks
 # Documentation
 uv run build-tools docs                # Build documentation
 uv run build-tools docs --clean        # Clean build and rebuild docs
-uv run build-tools serve-docs          # Build and serve docs locally
-uv run build-tools serve-docs --no-build  # Serve existing docs
+uv run build-tools preview-docs        # Build and preview docs locally
+uv run build-tools preview-docs --no-build  # Preview existing docs
 uv run build-tools serve-coverage      # Serve coverage reports
 
 # Distribution
@@ -159,7 +159,7 @@ Use `uv run build-tools check` to run all quality checks at once, or run individ
 - Add examples where helpful
 - Update README.md if needed
 - Build docs locally to verify changes: `uv run build-tools docs`
-- Serve docs locally for review: `uv run build-tools serve-docs`
+- Preview docs locally for review: `uv run build-tools preview-docs`
 
 ## Reporting Issues
 

@@ -50,19 +50,19 @@ To preview the documentation locally:
 
 ```bash
 # Using build tools (recommended)
-uv run build-tools serve-docs
+uv run build-tools preview-docs
 
-# Serve existing docs without rebuilding
-uv run build-tools serve-docs --no-build
+# Preview existing docs without rebuilding
+uv run build-tools preview-docs --no-build
 
 # Or using the direct script
-uv run build_tools.py serve-docs
+uv run build_tools.py preview-docs
 
-# Or manually start a server
+# Or manually start a server (if needed)
 python -m http.server 8000 -d build/docs
 
-# Open browser to
-http://localhost:8000/toolcraft/v0.1.0/en/
+# The preview-docs command will automatically open the documentation
+# in your browser with proper doc-builder preview functionality
 ```
 
 ### Clean Build
@@ -86,23 +86,23 @@ The unified build tools provide comprehensive build management:
 
 ```bash
 # Documentation
-uv run build-tools docs                    # Build docs
-uv run build-tools docs --clean            # Clean build docs
-uv run build-tools serve-docs              # Build and serve docs
-uv run build-tools serve-docs --no-build   # Serve existing docs
+uv run build-tools docs                      # Build docs
+uv run build-tools docs --clean              # Clean build docs
+uv run build-tools preview-docs              # Build and preview docs
+uv run build-tools preview-docs --no-build   # Preview existing docs
 
 # Testing and Coverage
-uv run build-tools test                    # Run tests with coverage
-uv run build-tools serve-coverage          # Serve coverage reports
+uv run build-tools test                      # Run tests with coverage
+uv run build-tools serve-coverage            # Serve coverage reports
 
 # Code Quality
-uv run build-tools lint                    # Run linting
-uv run build-tools format                  # Format code
-uv run build-tools typecheck               # Type checking
-uv run build-tools check                   # Run all checks
+uv run build-tools lint                      # Run linting
+uv run build-tools format                    # Format code
+uv run build-tools typecheck                 # Type checking
+uv run build-tools check                     # Run all checks
 
 # Build Management
-uv run build-tools clean                   # Clean all build artifacts
+uv run build-tools clean                     # Clean all build artifacts
 uv run build-tools clean --target docs     # Clean docs only
 uv run build-tools build                   # Build distribution packages
 

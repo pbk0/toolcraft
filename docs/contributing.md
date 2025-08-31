@@ -73,7 +73,7 @@ uv run build-tools check        # Run all quality checks
 
 # Documentation
 uv run build-tools docs         # Build documentation
-uv run build-tools serve-docs   # Build and serve docs locally
+uv run build-tools preview-docs # Build and preview docs locally
 uv run build-tools serve-coverage  # Serve coverage reports
 
 # Distribution

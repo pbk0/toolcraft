@@ -182,47 +182,30 @@ def publish_package(test: bool = False) -> bool:
     return run_uv_command(cmd, desc)
 
 
-def serve_docs(
-    port: int = None, open_browser: bool = None, no_build: bool = False
-) -> None:
-    """Build and serve documentation locally."""
-    # Use config defaults if not specified
-    if port is None:
-        port = CONFIG.get("docs_port", 8000)
-    if open_browser is None:
-        open_browser = CONFIG.get("open_browser", True)
-
+def preview_docs(no_build: bool = False) -> None:
+    """Preview documentation using doc-builder preview."""
     if not no_build and CONFIG.get("build_before_serve", True):
         if not build_docs():
             return
     else:
         # Check if docs exist
-        docs_build_dir = CONFIG.get("docs_build_dir", "build/docs")
-        docs_path = Path(docs_build_dir) / "toolcraft"
+        docs_path = Path("docs")
         if not docs_path.exists():
             print(
-                "❌ Documentation not found. Build first with: uv run build-tools docs"
+                "❌ Documentation source not found. Make sure docs/ directory exists."
             )
             return
 
-    docs_build_dir = CONFIG.get("docs_build_dir", "build/docs")
-    cmd = ["python", "-m", "http.server", str(port), "-d", docs_build_dir]
-
-    print(f"🌐 Starting local server on port {port}...")
-    print("📖 Documentation will be available at:")
-    print(f"   http://localhost:{port}/toolcraft/v0.1.0/en/")
-    print()
-    print("Press Ctrl+C to stop the server")
-
-    if open_browser:
-        url = f"http://localhost:{port}/toolcraft/v0.1.0/en/"
-        print(f"🔗 Opening browser to {url}...")
-        webbrowser.open(url)
-
+    # Use doc-builder preview command
+    cmd = ["run", "doc-builder", "preview", "toolcraft", "docs"]
+    
+    print("🔍 Starting documentation preview...")
+    print("Press Ctrl+C to stop the preview")
+    
     try:
-        subprocess.run(cmd, cwd=Path.cwd())
+        subprocess.run(["uv"] + cmd, cwd=Path.cwd())
     except KeyboardInterrupt:
-        print("\n👋 Server stopped")
+        print("\n👋 Preview stopped")
 
 
 def serve_coverage(port: int = None, open_browser: bool = None) -> None:
@@ -312,7 +295,7 @@ Examples:
   uv run build-tools publish --test      # Test publish to TestPyPI
   uv run build-tools publish             # Publish to PyPI
   uv run build-tools check               # Run all quality checks
-  uv run build-tools serve-docs          # Build and serve docs
+  uv run build-tools preview-docs        # Preview docs with doc-builder
   uv run build-tools serve-coverage      # Serve coverage reports
 
 Alternative usage:
@@ -353,22 +336,13 @@ Configuration:
     docs_parser = subparsers.add_parser("docs", help="Build documentation")
     docs_parser.add_argument("--clean", action="store_true", help="Clean build first")
 
-    serve_docs_parser = subparsers.add_parser(
-        "serve-docs", help="Build and serve documentation"
+    preview_docs_parser = subparsers.add_parser(
+        "preview-docs", help="Preview documentation using doc-builder"
     )
-    serve_docs_parser.add_argument(
-        "--port",
-        type=int,
-        default=CONFIG.get("docs_port", 8000),
-        help="Port to serve on",
-    )
-    serve_docs_parser.add_argument(
-        "--no-browser", action="store_true", help="Don't open browser"
-    )
-    serve_docs_parser.add_argument(
+    preview_docs_parser.add_argument(
         "--no-build",
         action="store_true",
-        help="Don't build before serving (serve existing build)",
+        help="Don't build before previewing (use existing docs)",
     )
 
     serve_cov_parser = subparsers.add_parser(
@@ -418,10 +392,8 @@ Configuration:
     elif args.command == "docs":
         success = build_docs(clean=args.clean)
 
-    elif args.command == "serve-docs":
-        serve_docs(
-            port=args.port, open_browser=not args.no_browser, no_build=args.no_build
-        )
+    elif args.command == "preview-docs":
+        preview_docs(no_build=args.no_build)
         return  # Don't exit with code
 
     elif args.command == "serve-coverage":
