@@ -49,7 +49,7 @@ message = hello()
 print(message)  # "Hello from ToolCraft!"
 ```
 
-### Command Line Usage
+Command Line Usage:
 
 ```bash
 # Basic usage
@@ -181,6 +181,10 @@ uv publish                   # for production
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
+**Important**: All contributors must sign our [Contributor License Agreement (CLA)](CLA.md) before their contributions can be accepted. This ensures clear ownership and licensing of all project contributions.
+
+Quick Start for Contributors:
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Make your changes
@@ -189,16 +193,13 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 6. Commit your changes (`git commit -m 'Add amazing feature'`)
 7. Push to the branch (`git push origin feature/amazing-feature`)
 8. Open a Pull Request
+9. Sign the CLA when prompted by the CLA Assistant bot
+
+By contributing to this project, you assign all rights to your contributions to SpikingNeurons and agree that you have no claim to ownership of the contributions.
 
 ## License
 
 This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
-
-## Contributing
-
-We welcome contributions! Please note that all contributors must sign our [Contributor License Agreement (CLA)](CLA.md) before their contributions can be accepted. This ensures clear ownership and licensing of all project contributions.
-
-By contributing to this project, you assign all rights to your contributions to SpikingNeurons and agree that you have no claim to ownership of the contributions.
 
 ## Changelog
 
@@ -213,7 +214,7 @@ See [CHANGELOG.md](CHANGELOG.md) for a list of changes and releases.
 ## Acknowledgments
 
 - Thanks to all contributors who have helped shape ToolCraft
-- Built with modern Python tooling including [uv](https://docs.astral.sh/uv/), [pytest](https://pytest.org/), and [Sphinx](https://www.sphinx-doc.org/)
+- Built with modern Python tooling including [uv](https://docs.astral.sh/uv/), [pytest](https://pytest.org/), and [doc-builder](https://github.com/huggingface/doc-builder)
 
 ---
 
