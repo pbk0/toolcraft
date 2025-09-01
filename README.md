@@ -192,7 +192,13 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the BSD 3-Clause License - see the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+We welcome contributions! Please note that all contributors must sign our [Contributor License Agreement (CLA)](CLA.md) before their contributions can be accepted. This ensures clear ownership and licensing of all project contributions.
+
+By contributing to this project, you assign all rights to your contributions to SpikingNeurons and agree that you have no claim to ownership of the contributions.
 
 ## Changelog
 

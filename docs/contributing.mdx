@@ -2,6 +2,22 @@
 
 Thank you for your interest in contributing to ToolCraft! This guide will help you get started with development, testing, and contributing to the project.
 
+## Contributor License Agreement (CLA)
+
+**IMPORTANT**: Before contributing to ToolCraft, all contributors must sign our [Contributor License Agreement (CLA)](https://github.com/SpikingNeurons/toolcraft/blob/main/CLA.md).
+
+### Key Points of the CLA:
+- You assign all rights to your contributions to SpikingNeurons
+- You have no claim to ownership of the contributions you make
+- You waive any claims to revenue or profits from the project
+- This ensures clear ownership and licensing of all project contributions
+
+### How to Sign the CLA:
+1. Read the full [CLA document](https://github.com/SpikingNeurons/toolcraft/blob/main/CLA.md)
+2. When you create a pull request, the CLA Assistant bot will guide you
+3. Comment on your PR with: `I have read the CLA Document and I hereby sign the CLA`
+4. The bot will record your signature and allow your contribution to proceed
+
 ## Quick Start
 
 1. **Fork and Clone**
@@ -251,34 +267,115 @@ uv run pytest --cov=toolcraft --cov-report=html
 
 ## Documentation
 
+### Documentation Overview
+
+ToolCraft documentation is built using Hugging Face's [doc-builder](https://github.com/huggingface/doc-builder) and uses MDX format (Markdown with JSX support) for all documentation files.
+
 ### Documentation Structure
 
 Documentation is organized as follows:
 
 ```
 docs/
-├── _toctree.yml           # Table of contents
-├── index.mdx              # Main documentation page
-├── installation.mdx       # Installation guide
-├── quickstart.mdx         # Quick start guide
-├── user_guide/           # User guide
-│   ├── index.mdx
-│   ├── cli.mdx
-│   └── examples.mdx
-├── api/                  # API reference
-│   ├── index.mdx
-│   ├── main.mdx
-│   └── cli.mdx
-├── contributing.mdx      # This file
-└── changelog.mdx         # Changelog
+├── _config.yml           # Doc-builder configuration
+├── _toctree.yml          # Table of contents / navigation structure
+├── README.md             # Documentation README
+├── index.mdx             # Main documentation page
+├── installation.mdx      # Installation guide
+├── quickstart.mdx        # Quick start guide
+├── user_guide/          # User guide documentation
+│   ├── index.mdx        # User guide overview
+│   ├── cli.mdx          # CLI reference
+│   └── examples.mdx     # Usage examples
+├── api/                 # API reference documentation
+│   ├── index.mdx        # API overview
+│   ├── main.mdx         # Main module documentation
+│   └── cli.mdx          # CLI module documentation
+├── contributing.mdx     # This file
+├── changelog.mdx        # Project changelog
+└── development-notes.md # Internal development notes
 ```
 
-### Writing Documentation
+### Building Documentation
 
-- Use Markdown (.mdx) format
-- Include code examples
-- Keep it concise but comprehensive
-- Update documentation when adding features
+#### Using ToolCraft Build Tools (Recommended)
+
+If you're working on the ToolCraft project:
+
+```bash
+# Build documentation
+uv run build-tools docs
+
+# Clean build and rebuild
+uv run build-tools docs --clean
+
+# Preview documentation locally
+uv run build-tools preview-docs
+
+# Preview without building (if docs already built)
+uv run build-tools preview-docs --no-build
+```
+
+#### Using doc-builder Directly
+
+Install doc-builder and build the documentation:
+
+```bash
+# Install doc-builder
+pip install hf-doc-builder
+
+# Build documentation
+doc-builder build toolcraft docs/ --build_dir build_docs/
+
+# Preview documentation
+doc-builder preview toolcraft docs/ --build_dir build_docs/
+```
+
+### Documentation File Format
+
+- **Format**: MDX (Markdown with JSX support)
+- **Extensions**: `.mdx` for all documentation files
+- **Navigation**: Defined in `_toctree.yml`
+- **Configuration**: Set in `_config.yml`
+
+### Contributing to Documentation
+
+#### Process
+
+1. **Edit files**: Make changes to `.mdx` files in appropriate directories
+2. **Update navigation**: Modify `_toctree.yml` if adding new pages
+3. **Test locally**: Build and preview documentation before submitting
+4. **Follow style**: Use consistent formatting and structure
+
+#### Style Guidelines
+
+- Use clear, concise language
+- Include code examples where helpful
+- Use proper Markdown formatting
+- Add appropriate headings and structure
+- Link between related sections
+
+#### Code Examples
+
+Always include working code examples:
+
+```python
+from toolcraft.main import hello_message
+
+# Get a greeting message
+message = hello_message()
+print(message)
+```
+
+```bash
+# CLI usage
+toolcraft --hello
+toolcraft --version
+```
+
+### Documentation Deployment
+
+The documentation is built and deployed automatically through CI/CD when changes are pushed to the main branch. You can preview changes locally before submitting pull requests.
 
 ## Git Workflow
 

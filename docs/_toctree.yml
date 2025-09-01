@@ -31,3 +31,5 @@
     title: Contributing Guide
   - local: changelog
     title: Changelog
+  - local: development-notes
+    title: Development Notes

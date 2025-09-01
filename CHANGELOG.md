@@ -15,9 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions for CI/CD
 - PyPI publishing workflow
 - GitHub Pages documentation deployment
+- Contributor License Agreement (CLA) requirement for all contributions
+- GitHub Action workflow for automatic CLA enforcement
+- Pull request template with CLA acknowledgment
 
 ### Changed
+- **BREAKING**: License changed from MIT to BSD 3-Clause License
 - Restructured project to follow Python packaging best practices
+- All contributors must now sign CLA before contributions can be accepted
 
 ## [0.1.0] - 2025-08-27
 
