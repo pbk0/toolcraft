@@ -1,44 +1,29 @@
 ## Description
 
-Please include a summary of the changes and the related issue. Please also include relevant motivation and context.
+Brief description of the changes made:
 
 Fixes # (issue)
 
-## Type of change
+## Type of Change
 
-Please delete options that are not relevant.
+- [ ] Bug fix
+- [ ] New feature  
+- [ ] Breaking change
+- [ ] Documentation update
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] This change requires a documentation update
+## Checklist
 
-## How Has This Been Tested?
-
-Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce.
-
-- [ ] Test A
-- [ ] Test B
-
-## Checklist:
-
-- [ ] My code follows the style guidelines of this project
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published in downstream modules
+- [ ] Code follows project style guidelines
+- [ ] Self-reviewed my code
+- [ ] Added/updated tests as needed
+- [ ] Updated documentation if required
+- [ ] All tests pass locally
 
 ## Contributor License Agreement
 
-- [ ] I have read and agree to the [Contributor License Agreement (CLA)](https://github.com/SpikingNeurons/toolcraft/blob/main/CLA.md)
-- [ ] I understand that by contributing to this project, I assign all rights to my contributions to SpikingNeurons
-- [ ] I confirm that I have no claim to ownership of the contributions I am making
+**🚨 IMPORTANT**: All contributors must sign our CLA before contributions can be accepted.
 
-**Note**: The CLA Assistant bot will automatically check if you have signed the CLA. If you haven't signed it yet, please comment on this PR with: `I have read the CLA Document and I hereby sign the CLA`
+- [ ] I have read and agree to the [Contributor License Agreement](https://github.com/SpikingNeurons/toolcraft/blob/main/CLA.md)
+- [ ] I understand that I assign all rights to my contributions to SpikingNeurons
 
-## Additional Information
-
-Add any other context about the pull request here.
+> **Auto-Signing**: The CLA Assistant bot will guide you through signing. Simply comment: `I have read the CLA Document and I hereby sign the CLA`
