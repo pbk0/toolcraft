@@ -1,0 +1,294 @@
+# Command Line Interface
+
+ToolCraft provides a powerful command-line interface (CLI) that makes it easy to use its features from the terminal or in scripts.
+
+## Basic Usage
+
+The main command is `toolcraft`. You can get help at any time:
+
+```bash
+toolcraft --help
+```
+
+## Available Commands and Options
+
+### Version Information
+
+Display the current version of ToolCraft:
+
+```bash
+toolcraft --version
+```
+
+**Output Example:**
+```
+ToolCraft, version 0.1.0
+```
+
+### Greeting Message
+
+Get a friendly greeting from ToolCraft:
+
+```bash
+toolcraft --hello
+```
+
+**Output Example:**
+```
+Hello from ToolCraft!
+```
+
+### Help Information
+
+Display comprehensive help information:
+
+```bash
+toolcraft --help
+```
+
+**Output Example:**
+```
+Usage: toolcraft [OPTIONS]
+
+  ToolCraft - A comprehensive toolkit for automation and development.
+
+Options:
+  --version   Show the version and exit.
+  --hello     Print a greeting message
+  --help      Show this message and exit.
+```
+
+## Command Combinations
+
+You can combine multiple options:
+
+```bash
+# Show version and hello message
+toolcraft --version --hello
+
+# Get help for specific features
+toolcraft --help | grep -i hello
+```
+
+## Exit Codes
+
+ToolCraft follows standard Unix exit code conventions:
+
+- `0`: Success
+- `1`: General error
+- `2`: Misuse of shell command
+
+## Scripting with ToolCraft CLI
+
+### Basic Script Example
+
+```bash
+#!/bin/bash
+
+# Check if ToolCraft is available
+if command -v toolcraft &> /dev/null; then
+    echo "ToolCraft is installed"
+    toolcraft --version
+else
+    echo "ToolCraft is not installed"
+    exit 1
+fi
+
+# Use ToolCraft in your automation
+toolcraft --hello
+```
+
+### PowerShell Example
+
+```powershell
+# PowerShell script using ToolCraft
+try {
+    # Check version
+    $version = toolcraft --version
+    Write-Host "Using $version"
+    
+    # Get greeting
+    $greeting = toolcraft --hello
+    Write-Host $greeting
+    
+} catch {
+    Write-Error "Failed to run ToolCraft: $_"
+    exit 1
+}
+```
+
+### Python Subprocess Example
+
+```python
+import subprocess
+import sys
+
+def run_toolcraft_command(args):
+    """Run a ToolCraft command and return the output."""
+    try:
+        result = subprocess.run(
+            ['toolcraft'] + args,
+            capture_output=True,
+            text=True,
+            check=True
+        )
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        print(f"Error running ToolCraft: {e}")
+        return None
+
+# Examples
+version = run_toolcraft_command(['--version'])
+print(f"Version: {version}")
+
+greeting = run_toolcraft_command(['--hello'])
+print(f"Greeting: {greeting}")
+```
+
+## Advanced Usage
+
+### Environment Variables
+
+ToolCraft respects common environment variables:
+
+- `PYTHONPATH`: For custom module locations
+- `HOME` / `USERPROFILE`: For user-specific configurations
+
+### Configuration Files
+
+Currently, ToolCraft uses sensible defaults and doesn't require configuration files. Future versions may support:
+
+- `.toolcraft.toml` for project-specific settings
+- Global configuration in user's config directory
+
+### Debugging
+
+Enable verbose output for troubleshooting:
+
+```bash
+# Run with Python's verbose flag
+python -v -m toolcraft.cli --hello
+
+# Check import issues
+python -c "import toolcraft; print('Import successful')"
+```
+
+## Integration Examples
+
+### Makefiles
+
+```makefile
+# Makefile example
+.PHONY: greet version
+
+greet:
+	toolcraft --hello
+
+version:
+	toolcraft --version
+
+check-toolcraft:
+	@which toolcraft > /dev/null || (echo "ToolCraft not found" && exit 1)
+	@echo "ToolCraft is available"
+```
+
+### GitHub Actions
+
+```yaml
+# .github/workflows/example.yml
+name: Test ToolCraft
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install ToolCraft
+      run: pip install toolcraft
+    
+    - name: Test ToolCraft CLI
+      run: |
+        toolcraft --version
+        toolcraft --hello
+```
+
+### Docker
+
+```dockerfile
+# Dockerfile example
+FROM python:3.9-slim
+
+# Install ToolCraft
+RUN pip install toolcraft
+
+# Test installation
+RUN toolcraft --version
+
+# Default command
+CMD ["toolcraft", "--hello"]
+```
+
+## Error Handling
+
+### Common Errors
+
+**Command not found:**
+```bash
+bash: toolcraft: command not found
+```
+*Solution*: Ensure ToolCraft is installed and in your PATH.
+
+**Permission denied:**
+```bash
+Permission denied: toolcraft
+```
+*Solution*: Check file permissions or run with appropriate privileges.
+
+**Import errors:**
+```bash
+ModuleNotFoundError: No module named 'toolcraft'
+```
+*Solution*: Reinstall ToolCraft or check your Python environment.
+
+### Debugging Tips
+
+1. **Verify Installation:**
+   ```bash
+   python -m pip show toolcraft
+   ```
+
+2. **Check Python Path:**
+   ```bash
+   python -c "import sys; print(sys.path)"
+   ```
+
+3. **Test Import:**
+   ```bash
+   python -c "import toolcraft; print('OK')"
+   ```
+
+## Best Practices
+
+1. **Always check exit codes** in scripts
+2. **Use long option names** for clarity in scripts
+3. **Add error handling** for production scripts
+4. **Document your CLI usage** in project documentation
+5. **Test CLI commands** before deploying scripts
+
+## Future Features
+
+Planned CLI enhancements include:
+
+- Additional command options
+- Configuration file support
+- Plugin system for custom commands
+- Enhanced output formatting options
+- Interactive mode for complex workflows

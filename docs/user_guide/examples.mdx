@@ -1,0 +1,456 @@
+# Examples
+
+This page provides practical examples of using ToolCraft in various scenarios. Each example includes complete code and explanations.
+
+## Basic Examples
+
+### Hello World
+
+The simplest way to use ToolCraft:
+
+```python
+from toolcraft.main import hello_message
+
+# Get a greeting message
+message = hello_message()
+print(message)
+```
+
+**Output:**
+```
+Hello from ToolCraft!
+```
+
+### CLI Integration
+
+Using ToolCraft from the command line:
+
+```bash
+# Basic CLI usage
+toolcraft --hello
+toolcraft --version
+
+# Combine with other tools
+toolcraft --hello | cowsay  # If you have cowsay installed
+```
+
+## Automation Examples
+
+### Simple Automation Script
+
+Create a script that uses ToolCraft for automation tasks:
+
+```python
+#!/usr/bin/env python3
+"""
+Simple automation script using ToolCraft.
+"""
+
+import sys
+from toolcraft.main import hello_message
+
+def main():
+    """Main automation function."""
+    print("Starting automation script...")
+    
+    try:
+        # Use ToolCraft functionality
+        greeting = hello_message()
+        print(f"ToolCraft says: {greeting}")
+        
+        # Your automation logic here
+        print("Performing automation tasks...")
+        
+        # Example: File operations, API calls, etc.
+        print("Automation completed successfully!")
+        
+    except Exception as e:
+        print(f"Error during automation: {e}", file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Batch Processing Script
+
+Process multiple items using ToolCraft:
+
+```python
+#!/usr/bin/env python3
+"""
+Batch processing example with ToolCraft.
+"""
+
+import os
+import sys
+from pathlib import Path
+from toolcraft.main import hello_message
+
+def process_files(directory: str) -> None:
+    """Process files in a directory."""
+    print(f"Processing files in: {directory}")
+    
+    # Initialize with ToolCraft greeting
+    greeting = hello_message()
+    print(f"Starting batch process: {greeting}")
+    
+    directory_path = Path(directory)
+    
+    if not directory_path.exists():
+        print(f"Error: Directory {directory} does not exist")
+        sys.exit(1)
+    
+    # Process files
+    files = list(directory_path.glob("*.txt"))
+    
+    if not files:
+        print("No .txt files found to process")
+        return
+    
+    print(f"Found {len(files)} files to process")
+    
+    for file_path in files:
+        try:
+            print(f"Processing: {file_path.name}")
+            # Your file processing logic here
+            with open(file_path, 'r') as f:
+                content = f.read()
+                print(f"  File size: {len(content)} characters")
+        
+        except Exception as e:
+            print(f"  Error processing {file_path}: {e}")
+
+def main():
+    """Main function."""
+    if len(sys.argv) != 2:
+        print("Usage: python batch_example.py <directory>")
+        sys.exit(1)
+    
+    directory = sys.argv[1]
+    process_files(directory)
+
+if __name__ == "__main__":
+    main()
+```
+
+## Integration Examples
+
+### Flask Web Application
+
+Integrate ToolCraft into a web application:
+
+```python
+from flask import Flask, jsonify
+from toolcraft.main import hello_message
+
+app = Flask(__name__)
+
+@app.route('/api/hello')
+def api_hello():
+    """API endpoint that uses ToolCraft."""
+    try:
+        message = hello_message()
+        return jsonify({
+            'status': 'success',
+            'message': message,
+            'source': 'ToolCraft'
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'error': str(e)
+        }), 500
+
+@app.route('/health')
+def health_check():
+    """Health check endpoint."""
+    return jsonify({
+        'status': 'healthy',
+        'service': 'ToolCraft Integration'
+    })
+
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### FastAPI Application
+
+Modern async web framework integration:
+
+```python
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel
+from toolcraft.main import hello_message
+
+app = FastAPI(title="ToolCraft API", version="1.0.0")
+
+class MessageResponse(BaseModel):
+    message: str
+    source: str
+
+@app.get("/hello", response_model=MessageResponse)
+async def get_hello():
+    """Get a hello message from ToolCraft."""
+    try:
+        message = hello_message()
+        return MessageResponse(message=message, source="ToolCraft")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/health")
+async def health_check():
+    """Health check endpoint."""
+    return {"status": "healthy"}
+
+# Run with: uvicorn main:app --reload
+```
+
+## Testing Examples
+
+### Unit Testing
+
+Test your ToolCraft integrations:
+
+```python
+import unittest
+from unittest.mock import patch
+from toolcraft.main import hello_message
+
+class TestToolCraftIntegration(unittest.TestCase):
+    """Test ToolCraft integration."""
+    
+    def test_hello_message(self):
+        """Test the hello message function."""
+        message = hello_message()
+        self.assertIsInstance(message, str)
+        self.assertEqual(message, "Hello from ToolCraft!")
+    
+    def test_hello_message_not_empty(self):
+        """Test that hello message is not empty."""
+        message = hello_message()
+        self.assertNotEqual(message.strip(), "")
+    
+    @patch('toolcraft.main.hello_message')
+    def test_hello_message_mock(self, mock_hello):
+        """Test with mocked hello message."""
+        mock_hello.return_value = "Mocked greeting!"
+        
+        message = hello_message()
+        self.assertEqual(message, "Mocked greeting!")
+        mock_hello.assert_called_once()
+
+if __name__ == '__main__':
+    unittest.main()
+```
+
+### Pytest Examples
+
+Using pytest for testing:
+
+```python
+import pytest
+from toolcraft.main import hello_message
+
+def test_hello_message_returns_string():
+    """Test that hello_message returns a string."""
+    result = hello_message()
+    assert isinstance(result, str)
+
+def test_hello_message_content():
+    """Test the content of hello message."""
+    result = hello_message()
+    assert result == "Hello from ToolCraft!"
+
+def test_hello_message_not_empty():
+    """Test that hello message is not empty."""
+    result = hello_message()
+    assert len(result.strip()) > 0
+
+@pytest.mark.parametrize("expected", [
+    "Hello from ToolCraft!",
+])
+def test_hello_message_parametrized(expected):
+    """Parametrized test for hello message."""
+    result = hello_message()
+    assert result == expected
+```
+
+## Configuration Examples
+
+### Environment Configuration
+
+Using environment variables with ToolCraft:
+
+```python
+import os
+from toolcraft.main import hello_message
+
+def get_configured_message():
+    """Get a message with environment configuration."""
+    base_message = hello_message()
+    
+    # Add environment-specific information
+    env_name = os.getenv('ENVIRONMENT', 'development')
+    user_name = os.getenv('USER', 'unknown')
+    
+    return f"{base_message} Running in {env_name} environment for {user_name}"
+
+# Usage
+message = get_configured_message()
+print(message)
+```
+
+### Configuration File Example
+
+Using configuration files:
+
+```python
+import configparser
+from pathlib import Path
+from toolcraft.main import hello_message
+
+def load_config(config_path: str = "config.ini"):
+    """Load configuration from file."""
+    config = configparser.ConfigParser()
+    
+    if Path(config_path).exists():
+        config.read(config_path)
+    else:
+        # Default configuration
+        config['DEFAULT'] = {
+            'enable_greeting': 'true',
+            'custom_prefix': 'ToolCraft'
+        }
+    
+    return config
+
+def get_configured_greeting(config_path: str = "config.ini"):
+    """Get greeting with configuration."""
+    config = load_config(config_path)
+    
+    if config.getboolean('DEFAULT', 'enable_greeting', fallback=True):
+        base_message = hello_message()
+        prefix = config.get('DEFAULT', 'custom_prefix', fallback='ToolCraft')
+        return f"[{prefix}] {base_message}"
+    else:
+        return "Greeting disabled by configuration"
+
+# Example config.ini:
+# [DEFAULT]
+# enable_greeting = true
+# custom_prefix = MyApp
+```
+
+## Error Handling Examples
+
+### Robust Error Handling
+
+Handle errors gracefully:
+
+```python
+import logging
+import sys
+from toolcraft.main import hello_message
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
+
+def safe_hello_message():
+    """Safely get hello message with error handling."""
+    try:
+        message = hello_message()
+        logger.info(f"Successfully got message: {message}")
+        return message
+    
+    except ImportError as e:
+        logger.error(f"Import error: {e}")
+        return "Hello from backup system!"
+    
+    except Exception as e:
+        logger.error(f"Unexpected error: {e}")
+        return "Hello! (Error occurred)"
+
+def main():
+    """Main function with comprehensive error handling."""
+    try:
+        message = safe_hello_message()
+        print(f"Message: {message}")
+        
+    except KeyboardInterrupt:
+        logger.info("Process interrupted by user")
+        sys.exit(0)
+    
+    except Exception as e:
+        logger.critical(f"Critical error: {e}")
+        sys.exit(1)
+
+if __name__ == "__main__":
+    main()
+```
+
+## Performance Examples
+
+### Timing Operations
+
+Measure performance:
+
+```python
+import time
+from functools import wraps
+from toolcraft.main import hello_message
+
+def timing_decorator(func):
+    """Decorator to measure function execution time."""
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = func(*args, **kwargs)
+        end_time = time.time()
+        print(f"{func.__name__} took {end_time - start_time:.4f} seconds")
+        return result
+    return wrapper
+
+@timing_decorator
+def timed_hello_message():
+    """Timed version of hello message."""
+    return hello_message()
+
+# Usage
+message = timed_hello_message()
+print(f"Message: {message}")
+```
+
+### Caching Example
+
+Cache results for better performance:
+
+```python
+from functools import lru_cache
+from toolcraft.main import hello_message
+
+@lru_cache(maxsize=128)
+def cached_hello_message():
+    """Cached version of hello message."""
+    return hello_message()
+
+# Usage
+message1 = cached_hello_message()  # First call - computes result
+message2 = cached_hello_message()  # Second call - returns cached result
+
+print(f"Message: {message1}")
+print(f"Cache info: {cached_hello_message.cache_info()}")
+```
+
+## Next Steps
+
+These examples should give you a good starting point for using ToolCraft in your projects. For more advanced usage:
+
+- Check the [API Reference](../api/index) for detailed function documentation
+- Review the [CLI Reference](cli) for command-line usage
+- Explore the [User Guide](index) for comprehensive feature documentation
+- Consider [Contributing](../contributing) your own examples to help others

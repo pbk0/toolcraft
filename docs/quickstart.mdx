@@ -1,0 +1,136 @@
+# Quick Start
+
+This guide will help you get up and running with ToolCraft in just a few minutes.
+
+## Basic Usage
+
+### Command Line Interface
+
+ToolCraft provides a simple command-line interface:
+
+```bash
+# Display help
+toolcraft --help
+
+# Show version
+toolcraft --version
+
+# Get a greeting message
+toolcraft --hello
+```
+
+### Python API
+
+You can also use ToolCraft programmatically in your Python code:
+
+```python
+from toolcraft.main import hello_message
+
+# Get a greeting message
+message = hello_message()
+print(message)  # Output: "Hello from ToolCraft!"
+```
+
+## Your First ToolCraft Script
+
+Let's create a simple script that demonstrates ToolCraft's capabilities:
+
+```python
+#!/usr/bin/env python3
+"""
+A simple ToolCraft example script.
+"""
+
+from toolcraft.main import hello_message
+
+def main():
+    """Main function for our example."""
+    print("Welcome to ToolCraft!")
+    
+    # Get and display the greeting
+    greeting = hello_message()
+    print(f"Message from ToolCraft: {greeting}")
+    
+    print("ToolCraft is ready to help with your automation tasks!")
+
+if __name__ == "__main__":
+    main()
+```
+
+Save this as `example.py` and run it:
+
+```bash
+python example.py
+```
+
+## CLI Examples
+
+Here are some common CLI usage patterns:
+
+### Basic Commands
+
+```bash
+# Show help for all commands
+toolcraft --help
+
+# Display version information
+toolcraft --version
+
+# Get a friendly greeting
+toolcraft --hello
+```
+
+### Combining Options
+
+```bash
+# You can combine options as needed
+toolcraft --hello --version
+```
+
+## Next Steps
+
+Now that you have ToolCraft installed and working, here's what you can explore next:
+
+1. **[User Guide](user_guide/index)**: Learn about ToolCraft's features in detail
+2. **[CLI Reference](user_guide/cli)**: Complete command-line interface documentation
+3. **[Examples](user_guide/examples)**: More comprehensive examples and use cases
+4. **[API Reference](api/index)**: Detailed API documentation
+
+## Common Patterns
+
+### Error Handling
+
+When using ToolCraft in your scripts, it's good practice to handle errors:
+
+```python
+try:
+    from toolcraft.main import hello_message
+    message = hello_message()
+    print(message)
+except ImportError as e:
+    print(f"Error importing ToolCraft: {e}")
+    print("Make sure ToolCraft is installed: pip install toolcraft")
+```
+
+### Configuration
+
+ToolCraft follows Python best practices. You can extend it easily:
+
+```python
+import toolcraft
+
+# Check if ToolCraft is available
+if hasattr(toolcraft, '__version__'):
+    print(f"Using ToolCraft version {toolcraft.__version__}")
+else:
+    print("ToolCraft version information not available")
+```
+
+## Getting Help
+
+If you need help:
+
+- Check the [User Guide](user_guide/index) for detailed documentation
+- Browse [Examples](user_guide/examples) for common use cases
+- Visit the [GitHub repository](https://github.com/SpikingNeurons/toolcraft) for issues and discussions
+- Read the [API Reference](api/index) for detailed function documentation

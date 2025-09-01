@@ -1,23 +1,47 @@
-title: ToolCraft Documentation
-library_name: toolcraft
+title: ToolCraft
+language: en
+format: mdx
+
+# Repository information
+repo_name: toolcraft
+repo_owner: SpikingNeurons
 repo_url: https://github.com/SpikingNeurons/toolcraft
-version: main
 
-# Navigation and theme
-navbar_start:
-  - title: "Home"
-    url: "index"
-
-# Additional configuration
-code_sample_max_depth: 3
+# Documentation settings
+docs_url: https://spikingneurons.github.io/toolcraft/
 edit_page: true
-github_url: https://github.com/SpikingNeurons/toolcraft
 
-# Search configuration
-search:
-  enable: true
-
-# Theme customization
+# Theme settings
 theme:
   name: "huggingface"
-  sidebar_width: "300px"
+  palette:
+    primary: "blue"
+    accent: "blue"
+
+# Navigation structure is defined in _toctree.yml
+
+# Social links
+social:
+  github: https://github.com/SpikingNeurons/toolcraft
+  pypi: https://pypi.org/project/toolcraft/
+
+# Search settings
+search:
+  enabled: true
+
+# Code highlighting
+code_highlighting:
+  languages:
+    - python
+    - bash
+    - yaml
+    - toml
+    - json
+
+# Additional features
+features:
+  - navigation.tabs
+  - navigation.sections
+  - navigation.expand
+  - search.highlight
+  - search.share

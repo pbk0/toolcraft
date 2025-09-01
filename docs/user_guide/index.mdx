@@ -1,0 +1,143 @@
+# User Guide
+
+Welcome to the ToolCraft User Guide. This comprehensive guide will help you understand and use all of ToolCraft's features effectively.
+
+## What You'll Learn
+
+This user guide covers:
+
+- **[Command Line Interface](cli)**: Complete CLI reference and usage patterns
+- **[Examples](examples)**: Practical examples and common use cases
+- **Core Concepts**: Understanding ToolCraft's architecture and design principles
+
+## Getting Started
+
+If you haven't already, make sure you've completed the [Installation](../installation) and [Quick Start](../quickstart) guides.
+
+## Core Concepts
+
+### Design Philosophy
+
+ToolCraft is built around several key principles:
+
+1. **Simplicity**: Easy-to-use APIs and clear documentation
+2. **Reliability**: Robust error handling and comprehensive testing
+3. **Flexibility**: Extensible architecture for custom workflows
+4. **Performance**: Efficient implementations for automation tasks
+
+### Architecture Overview
+
+ToolCraft consists of several core components:
+
+- **Main Module** (`toolcraft.main`): Core functionality and utilities
+- **CLI Module** (`toolcraft.cli`): Command-line interface and entry points
+- **Version Module** (`toolcraft._version`): Version management
+
+### Common Workflows
+
+Here are some typical workflows when using ToolCraft:
+
+1. **Development Automation**:
+   - Use ToolCraft CLI for quick tasks
+   - Integrate ToolCraft functions into your scripts
+   - Build custom automation workflows
+
+2. **Task Automation**:
+   - Create reusable automation scripts
+   - Schedule tasks using ToolCraft utilities
+   - Monitor and log automation processes
+
+3. **Cross-Platform Development**:
+   - Use ToolCraft's cross-platform utilities
+   - Build portable automation solutions
+   - Handle platform-specific requirements
+
+## Best Practices
+
+### Code Organization
+
+When using ToolCraft in your projects:
+
+```python
+# Import only what you need
+from toolcraft.main import hello_message
+
+# Use descriptive variable names
+greeting_text = hello_message()
+
+# Add error handling
+try:
+    result = hello_message()
+    print(f"Success: {result}")
+except Exception as e:
+    print(f"Error: {e}")
+```
+
+### CLI Usage
+
+For command-line usage:
+
+```bash
+# Use long option names for scripts
+toolcraft --hello --version
+
+# Combine options efficiently
+toolcraft --help | grep -i option
+```
+
+### Integration
+
+When integrating ToolCraft into larger projects:
+
+- Use virtual environments to manage dependencies
+- Document your ToolCraft usage in your project's README
+- Consider wrapping ToolCraft functions for your specific use cases
+
+## Troubleshooting
+
+### Common Issues
+
+**Performance Issues**:
+- Profile your code to identify bottlenecks
+- Use appropriate data structures for your use case
+- Consider async operations for I/O-bound tasks
+
+**Integration Problems**:
+- Check version compatibility
+- Verify import paths
+- Review error messages carefully
+
+### Getting Support
+
+If you encounter issues:
+
+1. Check this user guide for solutions
+2. Review the [API Reference](../api/index)
+3. Search [GitHub Issues](https://github.com/SpikingNeurons/toolcraft/issues)
+4. Create a new issue with detailed information
+
+## Advanced Topics
+
+### Extending ToolCraft
+
+ToolCraft is designed to be extensible. You can:
+
+- Create custom utilities using ToolCraft as a foundation
+- Contribute new features to the project
+- Build domain-specific tools on top of ToolCraft
+
+### Performance Optimization
+
+For performance-critical applications:
+
+- Profile your code regularly
+- Use appropriate algorithms and data structures
+- Consider caching strategies for repeated operations
+- Monitor memory usage in long-running processes
+
+## Next Steps
+
+- Explore the [CLI Reference](cli) for detailed command documentation
+- Check out [Examples](examples) for practical use cases
+- Review the [API Reference](../api/index) for programming interface details
+- Consider [Contributing](../contributing) to the ToolCraft project

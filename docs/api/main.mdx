@@ -1,0 +1,267 @@
+# Main Module
+
+The `toolcraft.main` module contains the core functionality of ToolCraft.
+
+## Functions
+
+### hello_message()
+
+```python
+def hello_message() -> str:
+    """Return a greeting message."""
+```
+
+Returns a simple greeting message from ToolCraft.
+
+**Returns:**
+- `str`: The greeting message "Hello from ToolCraft!"
+
+**Example:**
+```python
+from toolcraft.main import hello_message
+
+message = hello_message()
+print(message)  # Output: "Hello from ToolCraft!"
+```
+
+**Usage Notes:**
+- This function has no parameters
+- Always returns the same message
+- Useful for testing and basic integration
+
+### main()
+
+```python
+@click.command()
+@click.version_option(version=__version__, prog_name="ToolCraft")
+@click.option(
+    "--hello",
+    is_flag=True,
+    help="Print a greeting message",
+)
+def main(hello: bool) -> None:
+    """ToolCraft - A comprehensive toolkit for automation and development."""
+```
+
+The main CLI function that handles command-line arguments and options.
+
+**Parameters:**
+- `hello` (bool): Flag to display greeting message
+
+**Returns:**
+- `None`: Prints output to stdout
+
+**Example:**
+```python
+from toolcraft.main import main
+
+# Call directly (not typical usage)
+main.callback(hello=True)  # Prints greeting
+main.callback(hello=False)  # Prints default message
+```
+
+**CLI Usage:**
+```bash
+# Display greeting
+toolcraft --hello
+
+# Default behavior
+toolcraft
+
+# Show help
+toolcraft --help
+
+# Show version
+toolcraft --version
+```
+
+## Implementation Details
+
+### Source Code
+
+The main module is implemented as follows:
+
+```python
+"""Main module for ToolCraft."""
+
+import click
+
+from . import __version__
+
+
+def hello_message() -> str:
+    """Return a greeting message."""
+    return "Hello from ToolCraft!"
+
+
+@click.command()
+@click.version_option(version=__version__, prog_name="ToolCraft")
+@click.option(
+    "--hello",
+    is_flag=True,
+    help="Print a greeting message",
+)
+def main(hello: bool) -> None:
+    """ToolCraft - A comprehensive toolkit for automation and development."""
+    if hello:
+        click.echo(hello_message())
+    else:
+        click.echo("ToolCraft CLI - Use --help for more options")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+### Dependencies
+
+The main module depends on:
+
+- `click`: For CLI functionality
+- `toolcraft.__version__`: For version information
+
+### Design Patterns
+
+The module follows these patterns:
+
+1. **Simple Functions**: `hello_message()` is a pure function with no side effects
+2. **Click Integration**: Uses Click decorators for CLI functionality
+3. **Conditional Logic**: Main function branches based on options
+4. **Module Entry Point**: Can be run directly as a script
+
+## Error Handling
+
+The main module has minimal error handling by design:
+
+```python
+try:
+    from toolcraft.main import hello_message
+    message = hello_message()
+    print(message)
+except ImportError:
+    print("ToolCraft main module not available")
+```
+
+## Testing
+
+The main module can be tested as follows:
+
+```python
+import unittest
+from toolcraft.main import hello_message
+
+class TestMain(unittest.TestCase):
+    
+    def test_hello_message(self):
+        """Test hello_message returns expected string."""
+        result = hello_message()
+        self.assertEqual(result, "Hello from ToolCraft!")
+        self.assertIsInstance(result, str)
+    
+    def test_hello_message_not_empty(self):
+        """Test hello_message returns non-empty string."""
+        result = hello_message()
+        self.assertTrue(len(result) > 0)
+```
+
+## Integration Examples
+
+### Using in Scripts
+
+```python
+#!/usr/bin/env python3
+"""Example script using ToolCraft main module."""
+
+from toolcraft.main import hello_message
+
+def main():
+    """Script main function."""
+    greeting = hello_message()
+    print(f"Script started: {greeting}")
+    
+    # Your script logic here
+    print("Script completed successfully")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Web Framework Integration
+
+```python
+from flask import Flask, jsonify
+from toolcraft.main import hello_message
+
+app = Flask(__name__)
+
+@app.route('/api/hello')
+def api_hello():
+    """API endpoint using ToolCraft."""
+    message = hello_message()
+    return jsonify({'message': message})
+```
+
+### Async Usage
+
+```python
+import asyncio
+from toolcraft.main import hello_message
+
+async def async_greeting():
+    """Async function using ToolCraft."""
+    # hello_message() is not async, but can be used in async context
+    message = hello_message()
+    print(f"Async greeting: {message}")
+
+# Usage
+asyncio.run(async_greeting())
+```
+
+## Performance
+
+### Benchmarks
+
+The `hello_message()` function is very fast:
+
+```python
+import timeit
+
+# Benchmark hello_message
+time_taken = timeit.timeit(
+    'hello_message()',
+    setup='from toolcraft.main import hello_message',
+    number=1000000
+)
+print(f"1M calls took {time_taken:.4f} seconds")
+# Typical result: ~0.1 seconds for 1M calls
+```
+
+### Memory Usage
+
+The function has minimal memory overhead:
+
+```python
+import sys
+from toolcraft.main import hello_message
+
+# Get memory usage
+message = hello_message()
+size = sys.getsizeof(message)
+print(f"Message size: {size} bytes")
+# Typical result: ~70 bytes
+```
+
+## Future Enhancements
+
+Planned improvements to the main module:
+
+1. **Additional Functions**: More utility functions
+2. **Configuration Support**: Config file handling
+3. **Logging Integration**: Built-in logging utilities
+4. **Plugin System**: Extensible architecture
+
+## See Also
+
+- [CLI Module](cli): Command-line interface implementation
+- [Examples](../user_guide/examples): Practical usage examples
+- [User Guide](../user_guide/index): Comprehensive usage documentation

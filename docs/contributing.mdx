@@ -1,0 +1,525 @@
+# Contributing to ToolCraft
+
+Thank you for your interest in contributing to ToolCraft! This guide will help you get started with development, testing, and contributing to the project.
+
+## Contributor License Agreement (CLA)
+
+**IMPORTANT**: Before contributing to ToolCraft, all contributors must sign our [Contributor License Agreement (CLA)](https://github.com/SpikingNeurons/toolcraft/blob/main/CLA.md).
+
+### Key Points of the CLA:
+- You assign all rights to your contributions to SpikingNeurons
+- You have no claim to ownership of the contributions you make
+- You waive any claims to revenue or profits from the project
+- This ensures clear ownership and licensing of all project contributions
+
+### How to Sign the CLA:
+1. Read the full [CLA document](https://github.com/SpikingNeurons/toolcraft/blob/main/CLA.md)
+2. When you create a pull request, the CLA Assistant bot will guide you
+3. Comment on your PR with: `I have read the CLA Document and I hereby sign the CLA`
+4. The bot will record your signature and allow your contribution to proceed
+
+## Quick Start
+
+1. **Fork and Clone**
+   ```bash
+   git clone https://github.com/your-username/toolcraft.git
+   cd toolcraft
+   ```
+
+2. **Set Up Development Environment**
+   ```bash
+   uv sync --all-extras
+   uv run pre-commit install
+   ```
+
+3. **Verify Setup**
+   ```bash
+   uv run build-tools check
+   uv run build-tools test
+   ```
+
+## Development Environment
+
+### Prerequisites
+
+- Python 3.9 or higher
+- [uv](https://github.com/astral-sh/uv) (recommended) or pip
+- Git
+
+### Installation
+
+```bash
+# Clone your fork
+git clone https://github.com/your-username/toolcraft.git
+cd toolcraft
+
+# Install all dependencies
+uv sync --all-extras
+
+# Install pre-commit hooks
+uv run pre-commit install
+```
+
+## Development Workflow
+
+### 1. Create a Feature Branch
+
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/issue-description
+```
+
+### 2. Make Your Changes
+
+- Write clear, readable code
+- Follow existing code style and patterns
+- Add tests for new functionality
+- Update documentation as needed
+- Add type hints for all functions
+
+### 3. Test Your Changes
+
+```bash
+# Run all tests
+uv run build-tools test
+
+# Run tests without coverage
+uv run build-tools test --no-coverage
+
+# Run specific test files
+uv run pytest tests/test_specific.py
+
+# Run with verbose output
+uv run pytest -v
+```
+
+### 4. Check Code Quality
+
+```bash
+# Run all quality checks
+uv run build-tools check
+
+# Individual checks
+uv run build-tools format    # Format code (black, isort)
+uv run build-tools lint      # Linting (flake8, bandit)
+uv run build-tools typecheck # Type checking (mypy)
+```
+
+### 5. Update Documentation
+
+```bash
+# Build documentation
+uv run build-tools docs
+
+# Preview documentation locally
+uv run build-tools preview-docs
+```
+
+### 6. Commit and Push
+
+```bash
+git add .
+git commit -m "feat: add new feature description"
+git push origin feature/your-feature-name
+```
+
+### 7. Create Pull Request
+
+- Go to GitHub and create a pull request
+- Use the PR template if available
+- Describe your changes clearly
+- Link any relevant issues
+- Ensure all CI checks pass
+
+## Build Tools
+
+ToolCraft includes a comprehensive build system with the `build_tools.py` script:
+
+### Available Commands
+
+```bash
+# Development
+uv run build-tools clean               # Clean all build artifacts
+uv run build-tools test                # Run tests with coverage
+uv run build-tools test --no-coverage  # Run tests without coverage
+uv run build-tools format              # Format code
+uv run build-tools lint                # Run linting
+uv run build-tools typecheck           # Type checking
+uv run build-tools check               # All quality checks
+
+# Documentation
+uv run build-tools docs                # Build documentation
+uv run build-tools docs --clean        # Clean build documentation
+uv run build-tools preview-docs        # Build and preview docs
+```
+
+## Code Style
+
+### Python Code Style
+
+- Follow [PEP 8](https://pep8.org/)
+- Use [Black](https://black.readthedocs.io/) for code formatting
+- Use [isort](https://isort.readthedocs.io/) for import sorting
+- Maximum line length: 88 characters (Black default)
+
+### Type Hints
+
+Add type hints to all functions:
+
+```python
+def hello_message() -> str:
+    """Return a greeting message."""
+    return "Hello from ToolCraft!"
+
+def process_data(data: List[str], count: int = 1) -> Dict[str, Any]:
+    """Process data and return results."""
+    # Implementation here
+    pass
+```
+
+### Documentation
+
+- Use clear, concise docstrings
+- Follow [Google style docstrings](https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings)
+- Include examples in docstrings when helpful
+
+```python
+def example_function(param1: str, param2: int = 0) -> bool:
+    """
+    Brief description of the function.
+    
+    Longer description with more details about what the function does,
+    its purpose, and any important information.
+    
+    Args:
+        param1: Description of the first parameter.
+        param2: Description of the second parameter. Defaults to 0.
+    
+    Returns:
+        Description of the return value.
+    
+    Raises:
+        ValueError: When param1 is empty.
+        TypeError: When param2 is not an integer.
+    
+    Example:
+        >>> result = example_function("hello", 5)
+        >>> print(result)
+        True
+    """
+    if not param1:
+        raise ValueError("param1 cannot be empty")
+    return len(param1) > param2
+```
+
+## Testing
+
+### Test Structure
+
+- Tests are located in the `tests/` directory
+- Use pytest for testing
+- Name test files with `test_` prefix
+- Group related tests in classes
+
+### Writing Tests
+
+```python
+import pytest
+from toolcraft.main import hello_message
+
+class TestMain:
+    """Test main module functionality."""
+    
+    def test_hello_message_returns_string(self):
+        """Test that hello_message returns a string."""
+        result = hello_message()
+        assert isinstance(result, str)
+        assert result == "Hello from ToolCraft!"
+    
+    def test_hello_message_not_empty(self):
+        """Test that hello_message returns non-empty string."""
+        result = hello_message()
+        assert len(result.strip()) > 0
+
+    @pytest.mark.parametrize("expected", [
+        "Hello from ToolCraft!",
+    ])
+    def test_hello_message_parametrized(self, expected):
+        """Parametrized test for hello message."""
+        result = hello_message()
+        assert result == expected
+```
+
+### Test Coverage
+
+- Aim for high test coverage (>90%)
+- Test both happy paths and error conditions
+- Include edge cases in your tests
+
+```bash
+# Check coverage
+uv run build-tools test
+
+# Generate HTML coverage report
+uv run pytest --cov=toolcraft --cov-report=html
+```
+
+## Documentation
+
+### Documentation Overview
+
+ToolCraft documentation is built using Hugging Face's [doc-builder](https://github.com/huggingface/doc-builder) and uses MDX format (Markdown with JSX support) for all documentation files.
+
+### Documentation Structure
+
+Documentation is organized as follows:
+
+```
+docs/
+├── _config.yml           # Doc-builder configuration
+├── _toctree.yml          # Table of contents / navigation structure
+├── README.md             # Documentation README
+├── index.mdx             # Main documentation page
+├── installation.mdx      # Installation guide
+├── quickstart.mdx        # Quick start guide
+├── user_guide/          # User guide documentation
+│   ├── index.mdx        # User guide overview
+│   ├── cli.mdx          # CLI reference
+│   └── examples.mdx     # Usage examples
+├── api/                 # API reference documentation
+│   ├── index.mdx        # API overview
+│   ├── main.mdx         # Main module documentation
+│   └── cli.mdx          # CLI module documentation
+├── contributing.mdx     # This file
+├── changelog.mdx        # Project changelog
+└── development-notes.md # Internal development notes
+```
+
+### Building Documentation
+
+#### Using ToolCraft Build Tools (Recommended)
+
+If you're working on the ToolCraft project:
+
+```bash
+# Build documentation
+uv run build-tools docs
+
+# Clean build and rebuild
+uv run build-tools docs --clean
+
+# Preview documentation locally
+uv run build-tools preview-docs
+
+# Preview without building (if docs already built)
+uv run build-tools preview-docs --no-build
+```
+
+#### Using doc-builder Directly
+
+Install doc-builder and build the documentation:
+
+```bash
+# Install doc-builder
+pip install hf-doc-builder
+
+# Build documentation
+doc-builder build toolcraft docs/ --build_dir build_docs/
+
+# Preview documentation
+doc-builder preview toolcraft docs/ --build_dir build_docs/
+```
+
+### Documentation File Format
+
+- **Format**: MDX (Markdown with JSX support)
+- **Extensions**: `.mdx` for all documentation files
+- **Navigation**: Defined in `_toctree.yml`
+- **Configuration**: Set in `_config.yml`
+
+### Contributing to Documentation
+
+#### Process
+
+1. **Edit files**: Make changes to `.mdx` files in appropriate directories
+2. **Update navigation**: Modify `_toctree.yml` if adding new pages
+3. **Test locally**: Build and preview documentation before submitting
+4. **Follow style**: Use consistent formatting and structure
+
+#### Style Guidelines
+
+- Use clear, concise language
+- Include code examples where helpful
+- Use proper Markdown formatting
+- Add appropriate headings and structure
+- Link between related sections
+
+#### Code Examples
+
+Always include working code examples:
+
+```python
+from toolcraft.main import hello_message
+
+# Get a greeting message
+message = hello_message()
+print(message)
+```
+
+```bash
+# CLI usage
+toolcraft --hello
+toolcraft --version
+```
+
+### Documentation Deployment
+
+The documentation is built and deployed automatically through CI/CD when changes are pushed to the main branch. You can preview changes locally before submitting pull requests.
+
+## Git Workflow
+
+### Commit Messages
+
+Use conventional commit format:
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
+```
+
+Types:
+- `feat`: New feature
+- `fix`: Bug fix
+- `docs`: Documentation changes
+- `style`: Code style changes (formatting, etc.)
+- `refactor`: Code refactoring
+- `test`: Adding or modifying tests
+- `chore`: Build process or auxiliary tool changes
+
+Examples:
+```
+feat(cli): add new --verbose option
+fix(main): handle empty input gracefully
+docs(api): update function docstrings
+test(main): add edge case tests
+```
+
+### Branch Naming
+
+- `feature/description` - New features
+- `fix/description` - Bug fixes
+- `docs/description` - Documentation updates
+- `refactor/description` - Code refactoring
+
+## Pull Request Process
+
+1. **Before Creating PR**
+   - Ensure all tests pass
+   - Run quality checks
+   - Update documentation
+   - Add changelog entry if needed
+
+2. **PR Description**
+   - Clear title and description
+   - Link related issues
+   - List changes made
+   - Include testing information
+
+3. **Review Process**
+   - Address reviewer feedback
+   - Keep commits clean and logical
+   - Ensure CI passes
+
+## Release Process
+
+### Version Management
+
+ToolCraft uses semantic versioning (SemVer):
+
+- `MAJOR.MINOR.PATCH`
+- Major: Breaking changes
+- Minor: New features (backward compatible)
+- Patch: Bug fixes
+
+### Changelog
+
+Update `CHANGELOG.md` for significant changes:
+
+```markdown
+## [Unreleased]
+
+### Added
+- New feature description
+
+### Changed
+- Changed feature description
+
+### Fixed
+- Bug fix description
+
+### Removed
+- Removed feature description
+```
+
+## Getting Help
+
+### Communication Channels
+
+- **GitHub Issues**: Bug reports and feature requests
+- **GitHub Discussions**: General questions and community discussion
+- **Pull Requests**: Code review and collaboration
+
+### Asking for Help
+
+When asking for help:
+
+1. Search existing issues first
+2. Provide clear, detailed descriptions
+3. Include minimal reproducible examples
+4. Specify your environment (Python version, OS, etc.)
+
+### Reporting Bugs
+
+Include:
+- Clear description of the problem
+- Steps to reproduce
+- Expected vs actual behavior
+- Environment information
+- Minimal code example
+
+### Suggesting Features
+
+Include:
+- Clear description of the feature
+- Use cases and benefits
+- Possible implementation approach
+- Breaking change considerations
+
+## Code of Conduct
+
+### Our Standards
+
+- Be respectful and inclusive
+- Welcome newcomers and help them learn
+- Focus on constructive feedback
+- Respect different viewpoints and experiences
+
+### Enforcement
+
+- Report issues to project maintainers
+- Violations may result in temporary or permanent bans
+- We reserve the right to remove offensive content
+
+## Recognition
+
+Contributors are recognized in:
+
+- GitHub contributors list
+- Release notes for significant contributions
+- Special thanks in documentation
+
+Thank you for contributing to ToolCraft! 🚀

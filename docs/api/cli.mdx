@@ -1,0 +1,376 @@
+# CLI Module
+
+The `toolcraft.cli` module provides command-line interface functionality and console script entry points.
+
+## Functions
+
+### toolcraft_cli()
+
+```python
+def toolcraft_cli():
+    """Entry point for the toolcraft command."""
+```
+
+The main entry point for the `toolcraft` console command. This function is registered as a console script in the package configuration and is called when users run `toolcraft` from the command line.
+
+**Parameters:**
+- None
+
+**Returns:**
+- `None`: Executes the CLI and exits
+
+**Example:**
+```python
+from toolcraft.cli import toolcraft_cli
+
+# Call directly (equivalent to running 'toolcraft' command)
+toolcraft_cli()
+```
+
+**Console Usage:**
+```bash
+# This calls toolcraft_cli() internally
+toolcraft --help
+toolcraft --version
+toolcraft --hello
+```
+
+## Implementation Details
+
+### Source Code
+
+The CLI module is implemented as follows:
+
+```python
+"""Console script entry points for ToolCraft."""
+
+from .main import main
+
+
+def toolcraft_cli():
+    """Entry point for the toolcraft command."""
+    main()
+
+
+if __name__ == "__main__":
+    toolcraft_cli()
+```
+
+### Design Philosophy
+
+The CLI module follows the principle of separation of concerns:
+
+1. **Entry Point Isolation**: Separates console script entry from main logic
+2. **Import Delegation**: Delegates to the main module for actual functionality
+3. **Simple Interface**: Provides a clean entry point for package installation
+4. **Script Execution**: Can be run directly as a Python script
+
+### Package Integration
+
+The CLI module is integrated with the package through `pyproject.toml`:
+
+```toml
+[project.scripts]
+toolcraft = "toolcraft.cli:toolcraft_cli"
+```
+
+This configuration allows users to run `toolcraft` from the command line after installation.
+
+## Usage Patterns
+
+### Direct Function Call
+
+```python
+from toolcraft.cli import toolcraft_cli
+
+# Call the CLI programmatically
+try:
+    toolcraft_cli()
+except SystemExit:
+    # CLI functions typically call sys.exit()
+    print("CLI execution completed")
+```
+
+### Subprocess Execution
+
+```python
+import subprocess
+
+# Run the CLI as a subprocess
+result = subprocess.run(['toolcraft', '--hello'], capture_output=True, text=True)
+print(f"Output: {result.stdout}")
+print(f"Exit code: {result.returncode}")
+```
+
+### Module Execution
+
+```bash
+# Run the CLI module directly
+python -m toolcraft.cli --hello
+
+# Equivalent to
+toolcraft --hello
+```
+
+## Error Handling
+
+### CLI Error Patterns
+
+The CLI module inherits error handling from the main module:
+
+```python
+import sys
+from toolcraft.cli import toolcraft_cli
+
+try:
+    toolcraft_cli()
+except SystemExit as e:
+    # Normal CLI exit
+    sys.exit(e.code)
+except KeyboardInterrupt:
+    print("\nInterrupted by user")
+    sys.exit(130)
+except Exception as e:
+    print(f"Unexpected error: {e}")
+    sys.exit(1)
+```
+
+### Exit Codes
+
+The CLI follows standard Unix exit code conventions:
+
+- `0`: Success
+- `1`: General error
+- `2`: Command line usage error
+- `130`: Interrupted by Ctrl+C
+
+## Testing
+
+### Unit Testing
+
+```python
+import unittest
+from unittest.mock import patch
+from toolcraft.cli import toolcraft_cli
+
+class TestCLI(unittest.TestCase):
+    
+    @patch('toolcraft.cli.main')
+    def test_toolcraft_cli_calls_main(self, mock_main):
+        """Test that toolcraft_cli calls main function."""
+        toolcraft_cli()
+        mock_main.assert_called_once()
+    
+    def test_module_execution(self):
+        """Test that module can be executed directly."""
+        # This would typically be tested with subprocess
+        import toolcraft.cli
+        self.assertTrue(hasattr(toolcraft.cli, 'toolcraft_cli'))
+```
+
+### Integration Testing
+
+```python
+import subprocess
+import unittest
+
+class TestCLIIntegration(unittest.TestCase):
+    
+    def test_cli_help(self):
+        """Test CLI help command."""
+        result = subprocess.run(
+            ['python', '-m', 'toolcraft.cli', '--help'],
+            capture_output=True,
+            text=True
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn('ToolCraft', result.stdout)
+    
+    def test_cli_version(self):
+        """Test CLI version command."""
+        result = subprocess.run(
+            ['python', '-m', 'toolcraft.cli', '--version'],
+            capture_output=True,
+            text=True
+        )
+        self.assertEqual(result.returncode, 0)
+        self.assertIn('version', result.stdout)
+```
+
+## Performance
+
+### Startup Time
+
+The CLI module has minimal startup overhead:
+
+```python
+import timeit
+
+# Measure import time
+import_time = timeit.timeit(
+    'import toolcraft.cli',
+    number=1000
+)
+print(f"Import time: {import_time/1000:.4f}ms per import")
+```
+
+### Memory Footprint
+
+```python
+import sys
+import toolcraft.cli
+
+# Check memory usage
+modules_before = len(sys.modules)
+from toolcraft.cli import toolcraft_cli
+modules_after = len(sys.modules)
+
+print(f"Modules loaded: {modules_after - modules_before}")
+```
+
+## Development
+
+### Adding New CLI Commands
+
+To extend the CLI with new commands, modify the main module:
+
+```python
+# In toolcraft/main.py
+import click
+
+@click.group()
+@click.version_option(version=__version__, prog_name="ToolCraft")
+def main():
+    """ToolCraft - A comprehensive toolkit for automation and development."""
+    pass
+
+@main.command()
+def hello():
+    """Print a greeting message."""
+    click.echo(hello_message())
+
+@main.command()
+def new_command():
+    """A new command."""
+    click.echo("This is a new command!")
+```
+
+### Multiple Entry Points
+
+You can create multiple CLI entry points:
+
+```python
+# In toolcraft/cli.py
+from .main import main, hello_command
+
+def toolcraft_cli():
+    """Main CLI entry point."""
+    main()
+
+def toolcraft_hello():
+    """Hello-specific entry point."""
+    hello_command()
+
+# In pyproject.toml
+[project.scripts]
+toolcraft = "toolcraft.cli:toolcraft_cli"
+toolcraft-hello = "toolcraft.cli:toolcraft_hello"
+```
+
+## Best Practices
+
+### CLI Design
+
+1. **Keep It Simple**: CLI should be a thin wrapper around main functionality
+2. **Clear Entry Points**: Use descriptive function names
+3. **Error Handling**: Handle common CLI errors gracefully
+4. **Documentation**: Provide clear help text and examples
+
+### Code Organization
+
+```python
+# Good: Separate concerns
+def toolcraft_cli():
+    """Entry point for CLI."""
+    main()
+
+# Avoid: Mixing CLI logic with business logic
+def toolcraft_cli():
+    """Don't put business logic here."""
+    # Business logic should be in main module
+    pass
+```
+
+## Security Considerations
+
+### Input Validation
+
+The CLI module inherits input validation from Click:
+
+```python
+# Click handles validation automatically
+@click.option('--count', type=int, help='Number of repetitions')
+def command(count):
+    # count is guaranteed to be an integer
+    pass
+```
+
+### Shell Injection
+
+Be careful when constructing shell commands:
+
+```python
+# Safe: Using subprocess with list arguments
+subprocess.run(['command', user_input])
+
+# Unsafe: Using shell=True with user input
+subprocess.run(f'command {user_input}', shell=True)  # Don't do this
+```
+
+## Debugging
+
+### Enable Debug Mode
+
+```bash
+# Set environment variables for debugging
+export PYTHONPATH=/path/to/toolcraft
+export PYTHONDEBUG=1
+
+# Run with verbose output
+python -v -m toolcraft.cli --hello
+```
+
+### Logging
+
+```python
+import logging
+from toolcraft.cli import toolcraft_cli
+
+# Enable debug logging
+logging.basicConfig(level=logging.DEBUG)
+
+# Run CLI with logging
+toolcraft_cli()
+```
+
+## Migration Guide
+
+### Upgrading from Direct main() Calls
+
+If you were calling `main()` directly:
+
+```python
+# Old way (still works)
+from toolcraft.main import main
+main()
+
+# New way (recommended)
+from toolcraft.cli import toolcraft_cli
+toolcraft_cli()
+```
+
+## See Also
+
+- [Main Module](main): Core functionality and main() implementation
+- [User Guide - CLI](../user_guide/cli): Comprehensive CLI usage guide
+- [Examples](../user_guide/examples): CLI usage examples
