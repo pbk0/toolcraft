@@ -1,0 +1,97 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+- Comprehensive documentation structure for Hugging Face doc-builder
+- User guide with CLI reference and examples
+- API reference documentation for all modules
+- Contributing guidelines and development workflow
+- Documentation preview capabilities
+
+### Changed
+- Improved project documentation organization
+- Enhanced API documentation with detailed examples
+
+### Fixed
+- Documentation formatting and structure improvements
+
+## [0.1.0] - 2025-08-27
+
+### Added
+- Initial release of ToolCraft
+- Basic "hello" functionality via `hello_message()` function
+- Command-line interface with `--hello`, `--version`, and `--help` options
+- Package structure with proper metadata and configuration
+- Console script entry point (`toolcraft` command)
+- Comprehensive package configuration in `pyproject.toml`
+- GitHub Actions for CI/CD pipeline
+- PyPI publishing workflow
+- Basic project documentation
+
+### Technical Details
+- Python 3.9+ support
+- Click-based CLI framework
+- Proper package versioning with `_version.py`
+- Entry points for console scripts
+- Development dependencies for testing and quality assurance
+
+### Project Infrastructure
+- uv-based dependency management
+- pytest for testing framework
+- Code quality tools (black, isort, flake8, mypy)
+- Pre-commit hooks for automated checks
+- Build tools script for development automation
+
+## Version History
+
+### Version 0.1.0
+This initial release establishes the foundation for ToolCraft as a comprehensive toolkit for automation and development workflows. The release includes:
+
+**Core Features:**
+- Simple greeting functionality to demonstrate package structure
+- CLI interface for user interaction
+- Proper Python package configuration
+
+**Development Infrastructure:**
+- Complete development environment setup
+- Automated testing and quality assurance
+- Documentation framework
+- CI/CD pipeline for automated releases
+
+**Future Roadmap:**
+The 0.1.0 release sets the stage for future enhancements including:
+- Additional automation utilities
+- Configuration management features
+- File operation helpers
+- Cross-platform development tools
+- Plugin architecture for extensibility
+
+### Release Notes
+
+**Installation:**
+```bash
+pip install toolcraft
+# or
+uv add toolcraft
+```
+
+**Basic Usage:**
+```bash
+toolcraft --hello
+toolcraft --version
+```
+
+**Python API:**
+```python
+from toolcraft.main import hello_message
+message = hello_message()
+print(message)  # "Hello from ToolCraft!"
+```
+
+For detailed information about features and usage, see the [documentation](https://spikingneurons.github.io/toolcraft/).

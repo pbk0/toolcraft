@@ -1,0 +1,119 @@
+# Installation
+
+ToolCraft can be installed using several methods. Choose the one that best fits your workflow.
+
+## Requirements
+
+- Python 3.9 or higher
+- pip or uv (recommended)
+
+## Using pip
+
+The simplest way to install ToolCraft is using pip:
+
+```bash
+pip install toolcraft
+```
+
+## Using uv (Recommended)
+
+[uv](https://github.com/astral-sh/uv) is a fast Python package installer and resolver. We recommend using uv for better performance:
+
+```bash
+uv add toolcraft
+```
+
+## Development Installation
+
+If you want to contribute to ToolCraft or need the latest development version:
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/SpikingNeurons/toolcraft.git
+cd toolcraft
+```
+
+### 2. Install Dependencies
+
+Using uv (recommended):
+
+```bash
+uv sync --all-extras
+```
+
+Using pip:
+
+```bash
+pip install -e ".[dev,docs,test]"
+```
+
+### 3. Verify Installation
+
+```bash
+# Test the CLI
+toolcraft --help
+
+# Run tests
+pytest
+
+# Check version
+python -c "import toolcraft; print(toolcraft.__version__)"
+```
+
+## Optional Dependencies
+
+ToolCraft has several optional dependency groups:
+
+- `dev`: Development tools (pytest, coverage, etc.)
+- `docs`: Documentation building tools
+- `test`: Testing dependencies
+
+Install them as needed:
+
+```bash
+# Using uv
+uv sync --extra dev --extra docs
+
+# Using pip
+pip install "toolcraft[dev,docs]"
+```
+
+## Verification
+
+After installation, verify that ToolCraft is working correctly:
+
+```python
+import toolcraft
+
+# Check version
+print(f"ToolCraft version: {toolcraft.__version__}")
+
+# Test basic functionality
+from toolcraft.main import hello_message
+print(hello_message())
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**ImportError: No module named 'toolcraft'**
+- Ensure you're using the correct Python environment
+- Try reinstalling: `pip uninstall toolcraft && pip install toolcraft`
+
+**Permission Errors on Windows**
+- Run your terminal as Administrator
+- Or use: `pip install --user toolcraft`
+
+**Version Conflicts**
+- Use a virtual environment to avoid conflicts
+- Update pip: `python -m pip install --upgrade pip`
+
+### Getting Help
+
+If you encounter issues:
+
+1. Check the [GitHub Issues](https://github.com/SpikingNeurons/toolcraft/issues)
+2. Create a new issue with detailed error information
+3. Include your Python version and operating system

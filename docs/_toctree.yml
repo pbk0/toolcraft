@@ -1,0 +1,33 @@
+- title: Getting Started
+  sections:
+  - local: index
+    title: Introduction
+  - local: installation
+    title: Installation
+  - local: quickstart
+    title: Quick Start
+
+- title: User Guide
+  sections:
+  - local: user_guide/index
+    title: User Guide Overview
+  - local: user_guide/cli
+    title: Command Line Interface
+  - local: user_guide/examples
+    title: Examples
+
+- title: API Reference
+  sections:
+  - local: api/index
+    title: API Overview
+  - local: api/main
+    title: Main Module
+  - local: api/cli
+    title: CLI Module
+
+- title: Contributing
+  sections:
+  - local: contributing
+    title: Contributing Guide
+  - local: changelog
+    title: Changelog

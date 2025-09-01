@@ -1,0 +1,209 @@
+# API Reference
+
+Welcome to the ToolCraft API Reference. This section provides detailed documentation for all public APIs, classes, and functions in ToolCraft.
+
+## Overview
+
+ToolCraft is organized into several modules:
+
+- **[Main Module](main)**: Core functionality and primary entry points
+- **[CLI Module](cli)**: Command-line interface and console scripts
+
+## Quick Reference
+
+### Main Functions
+
+```python
+from toolcraft.main import hello_message
+
+# Get a greeting message
+message = hello_message()  # Returns: "Hello from ToolCraft!"
+```
+
+### CLI Entry Points
+
+```python
+from toolcraft.cli import toolcraft_cli
+
+# Entry point for CLI
+toolcraft_cli()  # Equivalent to running 'toolcraft' command
+```
+
+## Module Structure
+
+```
+toolcraft/
+├── __init__.py          # Package initialization and version
+├── _version.py          # Version management
+├── main.py              # Core functionality
+└── cli.py               # Command-line interface
+```
+
+## Import Patterns
+
+### Recommended Imports
+
+```python
+# Import specific functions
+from toolcraft.main import hello_message
+
+# Import CLI functions
+from toolcraft.cli import toolcraft_cli
+
+# Check version
+import toolcraft
+print(toolcraft.__version__)
+```
+
+### Avoid These Imports
+
+```python
+# Don't import private modules
+from toolcraft._version import __version__  # Use toolcraft.__version__ instead
+
+# Don't use star imports
+from toolcraft import *  # Not recommended
+```
+
+## Type Hints
+
+ToolCraft uses type hints throughout the codebase. Here are the common types:
+
+```python
+from typing import Optional, Dict, List, Any
+
+# Example function signature
+def example_function(name: str, count: int = 1) -> str:
+    """Example function with type hints."""
+    return f"Hello {name} " * count
+```
+
+## Error Handling
+
+ToolCraft follows Python conventions for error handling:
+
+```python
+try:
+    from toolcraft.main import hello_message
+    message = hello_message()
+except ImportError:
+    print("ToolCraft not installed")
+except Exception as e:
+    print(f"Unexpected error: {e}")
+```
+
+## Version Compatibility
+
+ToolCraft maintains backward compatibility within major versions:
+
+- **Current version**: 0.1.0
+- **Python requirement**: ≥ 3.9
+- **API stability**: Stable within minor versions
+
+## Deprecation Policy
+
+When APIs are deprecated:
+
+1. **Deprecation warning** is added in version N
+2. **Removal** happens in version N+2 (minimum 2 minor versions)
+3. **Migration guide** is provided in documentation
+
+## Performance Considerations
+
+### Function Call Overhead
+
+Most ToolCraft functions have minimal overhead:
+
+```python
+# Fast operations
+hello_message()  # O(1) - constant time
+
+# Consider caching for repeated calls
+from functools import lru_cache
+
+@lru_cache(maxsize=128)
+def cached_operation():
+    return some_expensive_operation()
+```
+
+### Memory Usage
+
+ToolCraft is designed to be lightweight:
+
+- Minimal dependencies
+- Lazy imports where possible
+- Efficient string operations
+
+## Best Practices
+
+### API Usage
+
+1. **Import what you need**: Only import specific functions
+2. **Use type hints**: Leverage ToolCraft's type annotations
+3. **Handle errors**: Always wrap API calls in try-except blocks
+4. **Check versions**: Verify compatibility in production code
+
+### Documentation
+
+When using ToolCraft APIs in your code:
+
+```python
+def my_function():
+    """
+    My function that uses ToolCraft.
+    
+    Returns:
+        str: A greeting message from ToolCraft
+        
+    Raises:
+        ImportError: If ToolCraft is not available
+    """
+    from toolcraft.main import hello_message
+    return hello_message()
+```
+
+## API Categories
+
+### Core APIs
+
+Functions and classes that provide core functionality:
+
+- `hello_message()`: Basic greeting functionality
+- Package metadata (`__version__`, etc.)
+
+### CLI APIs
+
+Functions related to command-line interface:
+
+- `toolcraft_cli()`: Main CLI entry point
+- `main()`: Click-based CLI implementation
+
+### Utility APIs
+
+Helper functions and utilities:
+
+- Version information
+- Package metadata
+
+## Future APIs
+
+Planned additions to the API:
+
+- Configuration management
+- Logging utilities
+- File operations
+- System integration functions
+
+## API Reference Sections
+
+- **[Main Module](main)**: Detailed documentation for `toolcraft.main`
+- **[CLI Module](cli)**: Detailed documentation for `toolcraft.cli`
+
+## Getting Help
+
+If you need help with the API:
+
+1. Check function docstrings: `help(function_name)`
+2. Review code examples in this documentation
+3. Check the [Examples](../user_guide/examples) section
+4. Visit the [GitHub repository](https://github.com/SpikingNeurons/toolcraft) for issues
